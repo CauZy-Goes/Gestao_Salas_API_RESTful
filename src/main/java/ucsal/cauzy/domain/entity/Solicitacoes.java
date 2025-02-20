@@ -37,6 +37,14 @@ public class Solicitacoes implements Serializable {
     @JoinColumn(name = "idstatus", nullable = false)
     private Status status;
 
+    @PrePersist
+    public void prePersist() {
+        if (this.status == null) {
+            this.status = new Status();
+            this.status.setIdStatus(1); // Define o status "Pendente" por padrão
+        }
+    }
+
     public Integer getIdSolicitacoes() {
         return idSolicitacoes;
     }
