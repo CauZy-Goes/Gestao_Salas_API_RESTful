@@ -39,6 +39,13 @@ public class SolicitacoesService {
                 .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
+    public List<SolicitacoesDTO> findByUsuarioSolicitanteId(Integer id) {
+        return solicitacoesRepository.findByUsuarioSolicitante_IdUsuario(id)
+                .stream()
+                .map(solicitacoesMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public SolicitacoesDTO save(SolicitacoesDTO solicitacoesDTO) {
         Solicitacoes solicitacoes = solicitacoesMapper.toEntity(solicitacoesDTO);
         Usuario usuarioAvaliador = solicitacoesDTO.getIdUsuarioAvaliador() == null ? null :
