@@ -10,5 +10,6 @@ public interface TipoSalaMapper {
 
     TipoSalaDTO toDTO(TipoSala tipoSala);
 
+
     TipoSala toEntity(TipoSalaDTO tipoSalaDTO);
 }

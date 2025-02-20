@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ucsal.cauzy.domain.entity.Solicitacoes;
 import ucsal.cauzy.domain.entity.Status;
 import ucsal.cauzy.domain.entity.Usuario;
+import ucsal.cauzy.domain.repository.EspacoFisicoRepository;
 import ucsal.cauzy.domain.repository.SolicitacoesRepository;
 import ucsal.cauzy.domain.repository.StatusRepository;
 import ucsal.cauzy.domain.repository.UsuarioRepository;
@@ -27,6 +28,10 @@ public class SolicitacoesService {
 
     @Autowired
     private SolicitacoesMapper solicitacoesMapper;
+
+    @Autowired
+    private EspacoFisicoRepository espacoFisicoRepository;
+
     @Autowired
     private StatusRepository statusRepository;
 
@@ -51,15 +56,23 @@ public class SolicitacoesService {
     }
 
     public SolicitacoesDTO save(SolicitacoesDTO solicitacoesDTO) {
-        Solicitacoes solicitacoes = solicitacoesMapper.toEntity(solicitacoesDTO);
-        Usuario usuarioAvaliador = solicitacoesDTO.getIdUsuarioAvaliador() == null ? null :
-                usuarioRepository.findById(solicitacoesDTO.getIdUsuarioAvaliador()).orElse(null);
-        Status status = solicitacoesDTO.getIdStatus() == null ? null :
-                statusRepository.findById(solicitacoesDTO.getIdStatus()).orElse(null);
-        solicitacoes.setUsuarioAvaliador(usuarioAvaliador);
-        solicitacoes.setStatus(status);
+        Solicitacoes solicitacoes = tratarSolicitacoes(solicitacoesDTO);
         Solicitacoes savedSolicitacoes = solicitacoesRepository.save(solicitacoes);
         return solicitacoesMapper.toDTO(savedSolicitacoes);
+    }
+
+    private Solicitacoes tratarSolicitacoes(SolicitacoesDTO solicitacoesDTO) {
+        Solicitacoes solicitacoes = solicitacoesMapper.toEntity(solicitacoesDTO);
+
+        Usuario usuarioAvaliador = solicitacoesDTO.getIdUsuarioAvaliador() == null ? null :
+                usuarioRepository.findById(solicitacoesDTO.getIdUsuarioAvaliador()).orElse(null);
+
+        Status status = solicitacoesDTO.getIdStatus() == null ? null :
+                statusRepository.findById(solicitacoesDTO.getIdStatus()).orElse(null);
+
+        solicitacoes.setUsuarioAvaliador(usuarioAvaliador);
+        solicitacoes.setStatus(status);
+        return solicitacoes;
     }
 
     public SolicitacoesDTO update(Integer id, SolicitacoesDTO solicitacoesDTO) {

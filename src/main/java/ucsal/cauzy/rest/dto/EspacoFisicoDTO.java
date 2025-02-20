@@ -1,11 +1,10 @@
 package ucsal.cauzy.rest.dto;
 
-import java.math.BigDecimal;
 
 public class EspacoFisicoDTO {
 
     private Integer idEspacoFisico;
-    private BigDecimal metragem;
+    private Integer numero;
     private Integer idTipoSala;
 
     public Integer getIdEspacoFisico() {
@@ -16,12 +15,12 @@ public class EspacoFisicoDTO {
         this.idEspacoFisico = idEspacoFisico;
     }
 
-    public BigDecimal getMetragem() {
-        return metragem;
+    public Integer getNumero() {
+        return numero;
     }
 
-    public void setMetragem(BigDecimal metragem) {
-        this.metragem = metragem;
+    public void setNumero(Integer numero) {
+        this.numero = numero;
     }
 
     public Integer getIdTipoSala() {
@@ -34,6 +33,6 @@ public class EspacoFisicoDTO {
 
     @Override
     public String toString() {
-        return "EspacoFisicoDTO [idEspacoFisico=" + idEspacoFisico + ", metragem=" + metragem + ", idTipoSala=" + idTipoSala + "]";
+        return "EspacoFisicoDTO [idEspacoFisico=" + idEspacoFisico + ", numero=" + numero + ", idTipoSala=" + idTipoSala + "]";
     }
 }

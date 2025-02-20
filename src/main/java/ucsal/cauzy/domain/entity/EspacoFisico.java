@@ -20,8 +20,8 @@ public class EspacoFisico implements Serializable {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Integer idEspacoFisico;
 
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal metragem;
+    @Column(nullable = false)
+    private Integer numero;
 
     @ManyToOne
     @JoinColumn(name = "idtiposala", nullable = false)
@@ -35,12 +35,12 @@ public class EspacoFisico implements Serializable {
 		this.idEspacoFisico = idEspacoFisico;
 	}
 
-	public BigDecimal getMetragem() {
-		return metragem;
+	public Integer getNumero() {
+		return numero;
 	}
 
-	public void setMetragem(BigDecimal metragem) {
-		this.metragem = metragem;
+	public void setNumero(Integer numero) {
+		this.numero = numero;
 	}
 
 	public TipoSala getTipoSala() {
@@ -53,7 +53,7 @@ public class EspacoFisico implements Serializable {
 
 	@Override
 	public String toString() {
-		return "EspacoFisico [idEspacoFisico=" + idEspacoFisico + ", metragem=" + metragem + ", tipoSala=" + tipoSala
+		return "EspacoFisico [idEspacoFisico=" + idEspacoFisico + ", numero=" + numero + ", tipoSala=" + tipoSala
 				+ "]";
 	}
 	
