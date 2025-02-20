@@ -61,6 +61,7 @@ public class UsuarioService {
     public UsuarioDTO update(Integer id, UsuarioDTO usuarioDTO) {
         if (usuarioRepository.existsById(id)) {
             Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
+            checkEmail(usuario, id);
             usuario.setIdUsuario(id); // Garante que o ID não seja sobrescrito
             Usuario updatedUsuario = usuarioRepository.save(usuario);
             return usuarioMapper.toDTO(updatedUsuario);
