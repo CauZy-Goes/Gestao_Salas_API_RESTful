@@ -22,6 +22,12 @@ public class SolicitacoesController {
         return ResponseEntity.ok(solicitacoes);
     }
 
+    @GetMapping("/solicitante/{id}")
+    public ResponseEntity<List<SolicitacoesDTO>> getSolicitacoesDoSolicitante(@PathVariable int id) {
+        List<SolicitacoesDTO> solicitacoes = solicitacoesService.findByUsuarioSolicitanteId(id);
+        return ResponseEntity.ok(solicitacoes);
+    }
+
     // GET /api/solicitacoes/{id} - Retorna um solicitacoes por ID
     @GetMapping("/{id}")
     public ResponseEntity<SolicitacoesDTO> getSolicitacoesById(@PathVariable Integer id) {
