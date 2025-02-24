@@ -1,4 +1,4 @@
-# 🚀 Gestão de Solicitações para Uso de Espaços Físicos 🏫
+# 🚀 API - Gestão de Solicitações para Uso de Espaços Físicos 🏫
 
 Este projeto é uma **API REST** desenvolvida para gerenciar solicitações de uso de espaços físicos em uma instituição, garantindo organização e eficiência no agendamento de salas. **Professores** podem solicitar reservas, enquanto **avaliadores** podem aprovar ou rejeitar os pedidos.
 
