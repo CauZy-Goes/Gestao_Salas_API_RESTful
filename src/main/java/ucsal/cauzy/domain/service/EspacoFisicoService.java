@@ -37,11 +37,9 @@ public class EspacoFisicoService {
     }
 
     public EspacoFisicoDTO findByNumero(Integer numero) {
-        EspacoFisico espacoFisico = espacoFisicoRepository.findByNumero(numero);
-        if (espacoFisico == null) {
-            throw new ResourceNotFoundException("Espaço Físico com número " + numero, null);
-        }
-        return espacoFisicoMapper.toDTO(espacoFisico);
+        return  espacoFisicoRepository.findByNumero(numero)
+                                    .map(espacoFisicoMapper::toDTO)
+                                    .orElseThrow(() -> new ResourceNotFoundException("Numero De Sala", numero));
     }
 
     public EspacoFisicoDTO save(EspacoFisicoDTO espacoFisicoDTO) {
