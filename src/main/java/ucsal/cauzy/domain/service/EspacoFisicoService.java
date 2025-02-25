@@ -30,7 +30,7 @@ public class EspacoFisicoService {
     public EspacoFisicoDTO findById(Integer id) {
         return espacoFisicoRepository.findById(id)
                 .map(espacoFisicoMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
+                .orElseThrow(() -> new ResourceNotFoundException("Espaço Físico", id));
     }
 
     public EspacoFisicoDTO save(EspacoFisicoDTO espacoFisicoDTO) {
@@ -40,20 +40,19 @@ public class EspacoFisicoService {
     }
 
     public EspacoFisicoDTO update(Integer id, EspacoFisicoDTO espacoFisicoDTO) {
-        if (espacoFisicoRepository.existsById(id)) {
-            EspacoFisico espacoFisico = espacoFisicoMapper.toEntity(espacoFisicoDTO);
-            espacoFisico.setIdEspacoFisico(id); // Garante que o ID não seja sobrescrito
-            EspacoFisico updatedEspacoFisico = espacoFisicoRepository.save(espacoFisico);
-            return espacoFisicoMapper.toDTO(updatedEspacoFisico);
+        if (!espacoFisicoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Espaço Físico", id);
         }
-        throw new ResourceNotFoundException(id);
+        EspacoFisico espacoFisico = espacoFisicoMapper.toEntity(espacoFisicoDTO);
+        espacoFisico.setIdEspacoFisico(id);
+        EspacoFisico updatedEspacoFisico = espacoFisicoRepository.save(espacoFisico);
+        return espacoFisicoMapper.toDTO(updatedEspacoFisico);
     }
 
     public void delete(Integer id) {
-        if (espacoFisicoRepository.existsById(id)) {
-            espacoFisicoRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException(id);
+        if (!espacoFisicoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Espaço Físico", id);
         }
+        espacoFisicoRepository.deleteById(id);
     }
 }
