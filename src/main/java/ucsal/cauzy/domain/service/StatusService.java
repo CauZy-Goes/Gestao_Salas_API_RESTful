@@ -30,7 +30,7 @@ public class StatusService {
     public StatusDTO findById(Integer id) {
         return statusRepository.findById(id)
                 .map(statusMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
+                .orElseThrow(() -> new ResourceNotFoundException("Status", id));
     }
 
     public StatusDTO save(StatusDTO statusDTO) {
@@ -46,14 +46,14 @@ public class StatusService {
             Status updatedStatus = statusRepository.save(status);
             return statusMapper.toDTO(updatedStatus);
         }
-        throw new ResourceNotFoundException(id);
+        throw new ResourceNotFoundException("Status", id);
     }
 
     public void delete(Integer id) {
         if (statusRepository.existsById(id)) {
             statusRepository.deleteById(id);
         } else {
-            throw new ResourceNotFoundException(id);
+            throw new ResourceNotFoundException("Status", id);
         }
     }
 }
