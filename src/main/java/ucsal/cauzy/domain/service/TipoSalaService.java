@@ -42,7 +42,7 @@ public class TipoSalaService {
     public TipoSalaDTO update(Integer id, TipoSalaDTO tipoSalaDTO) {
         if (tipoSalaRepository.existsById(id)) {
             TipoSala tipoSala = tipoSalaMapper.toEntity(tipoSalaDTO);
-            tipoSala.setIdTipoSala(id); // Garante que o ID não seja sobrescrito
+            tipoSala.setIdTipoSala(id);
             TipoSala updatedTipoSala = tipoSalaRepository.save(tipoSala);
             return tipoSalaMapper.toDTO(updatedTipoSala);
         }
@@ -50,10 +50,10 @@ public class TipoSalaService {
     }
 
     public void delete(Integer id) {
-        if (tipoSalaRepository.existsById(id)) {
-            tipoSalaRepository.deleteById(id);
-        } else {
+        if (!tipoSalaRepository.existsById(id)) {
             throw new ResourceNotFoundException("Tipo de Sala", id);
         }
+
+        tipoSalaRepository.deleteById(id);
     }
 }

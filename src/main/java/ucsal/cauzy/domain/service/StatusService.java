@@ -50,10 +50,9 @@ public class StatusService {
     }
 
     public void delete(Integer id) {
-        if (statusRepository.existsById(id)) {
-            statusRepository.deleteById(id);
-        } else {
+        if (!statusRepository.existsById(id)) {
             throw new ResourceNotFoundException("Status", id);
         }
+        statusRepository.deleteById(id);
     }
 }
