@@ -30,7 +30,7 @@ public class TipoSalaService {
     public TipoSalaDTO findById(Integer id) {
         return tipoSalaRepository.findById(id)
                 .map(tipoSalaMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
+                .orElseThrow(() -> new ResourceNotFoundException("Tipo de Sala", id));
     }
 
     public TipoSalaDTO save(TipoSalaDTO tipoSalaDTO) {
@@ -46,14 +46,14 @@ public class TipoSalaService {
             TipoSala updatedTipoSala = tipoSalaRepository.save(tipoSala);
             return tipoSalaMapper.toDTO(updatedTipoSala);
         }
-        throw new ResourceNotFoundException(id);
+        throw new ResourceNotFoundException("Tipo de Sala", id);
     }
 
     public void delete(Integer id) {
         if (tipoSalaRepository.existsById(id)) {
             tipoSalaRepository.deleteById(id);
         } else {
-            throw new ResourceNotFoundException(id);
+            throw new ResourceNotFoundException("Tipo de Sala", id);
         }
     }
 }
