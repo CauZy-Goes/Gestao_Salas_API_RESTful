@@ -24,7 +24,7 @@ public class EspacoFisico implements Serializable {
     private Integer numero;
 
     @ManyToOne
-    @JoinColumn(name = "idtiposala", nullable = false)
+    @JoinColumn(name = "idtiposala", nullable = true)
     private TipoSala tipoSala;
 
 	public Integer getIdEspacoFisico() {
