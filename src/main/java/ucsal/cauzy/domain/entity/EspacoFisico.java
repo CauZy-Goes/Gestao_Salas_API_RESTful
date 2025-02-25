@@ -20,11 +20,11 @@ public class EspacoFisico implements Serializable {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Integer idEspacoFisico;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private Integer numero;
 
     @ManyToOne
-    @JoinColumn(name = "idtiposala", nullable = false)
+    @JoinColumn(name = "idtiposala", nullable = true)
     private TipoSala tipoSala;
 
 	public Integer getIdEspacoFisico() {

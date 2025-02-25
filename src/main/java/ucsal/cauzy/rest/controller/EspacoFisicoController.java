@@ -28,6 +28,13 @@ public class EspacoFisicoController {
         return ResponseEntity.ok().body(espacoFisicoService.findById(id));
     }
 
+    // GET /api/espacoFisicos/numero/{numero} - Retorna um espacoFisico pelo número
+    @GetMapping("/numero/{numero}")
+    public ResponseEntity<EspacoFisicoDTO> getEspacoFisicoByNumero(@PathVariable Integer numero) {
+        EspacoFisicoDTO espacoFisicoDTO = espacoFisicoService.findByNumero(numero);
+        return ResponseEntity.ok(espacoFisicoDTO);
+    }
+
     // POST /api/espacoFisicos - Cria um novo espacoFisico
     @PostMapping
     public ResponseEntity<EspacoFisicoDTO> createEspacoFisico(@RequestBody EspacoFisicoDTO espacoFisicoDTO) {
