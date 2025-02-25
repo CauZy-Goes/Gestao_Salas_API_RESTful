@@ -30,7 +30,7 @@ public class LogAcoesService {
     public LogAcoesDTO findById(Integer id) {
         return logAcoesRepository.findById(id)
                 .map(logAcoesMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
+                .orElseThrow(() -> new ResourceNotFoundException("Log de Ações", id));
     }
 
     public LogAcoesDTO save(LogAcoesDTO logAcoesDTO) {
@@ -40,20 +40,19 @@ public class LogAcoesService {
     }
 
     public LogAcoesDTO update(Integer id, LogAcoesDTO logAcoesDTO) {
-        if (logAcoesRepository.existsById(id)) {
-            LogAcoes logAcoes = logAcoesMapper.toEntity(logAcoesDTO);
-            logAcoes.setIdLogAcoes(id); // Garante que o ID não seja sobrescrito
-            LogAcoes updatedLogAcoes = logAcoesRepository.save(logAcoes);
-            return logAcoesMapper.toDTO(updatedLogAcoes);
+        if (!logAcoesRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Log de Ações", id);
         }
-        throw new ResourceNotFoundException(id);
+        LogAcoes logAcoes = logAcoesMapper.toEntity(logAcoesDTO);
+        logAcoes.setIdLogAcoes(id); // Garante que o ID não seja sobrescrito
+        LogAcoes updatedLogAcoes = logAcoesRepository.save(logAcoes);
+        return logAcoesMapper.toDTO(updatedLogAcoes);
     }
 
     public void delete(Integer id) {
-        if (logAcoesRepository.existsById(id)) {
-            logAcoesRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException(id);
+        if (!logAcoesRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Log de Ações", id);
         }
+        logAcoesRepository.deleteById(id);
     }
 }
