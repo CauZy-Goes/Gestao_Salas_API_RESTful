@@ -30,7 +30,7 @@ public class CargoService {
     public CargoDTO findById(Integer id) {
         return cargoRepository.findById(id)
                 .map(cargoMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
+                .orElseThrow(() -> new ResourceNotFoundException("Cargo", id));
     }
 
     public CargoDTO save(CargoDTO cargoDTO) {
@@ -40,20 +40,19 @@ public class CargoService {
     }
 
     public CargoDTO update(Integer id, CargoDTO cargoDTO) {
-        if (cargoRepository.existsById(id)) {
-            Cargo cargo = cargoMapper.toEntity(cargoDTO);
-            cargo.setIdCargo(id); // Garante que o ID não seja sobrescrito
-            Cargo updatedCargo = cargoRepository.save(cargo);
-            return cargoMapper.toDTO(updatedCargo);
+        if (!cargoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Cargo", id);
         }
-        throw new ResourceNotFoundException(id);
+        Cargo cargo = cargoMapper.toEntity(cargoDTO);
+        cargo.setIdCargo(id); // Garante que o ID não seja sobrescrito
+        Cargo updatedCargo = cargoRepository.save(cargo);
+        return cargoMapper.toDTO(updatedCargo);
     }
 
     public void delete(Integer id) {
-        if (cargoRepository.existsById(id)) {
-            cargoRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException(id);
+        if (!cargoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Cargo", id);
         }
+        cargoRepository.deleteById(id);
     }
 }
