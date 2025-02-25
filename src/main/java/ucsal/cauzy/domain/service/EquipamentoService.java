@@ -30,7 +30,7 @@ public class EquipamentoService {
     public EquipamentoDTO findById(Integer id) {
         return equipamentoRepository.findById(id)
                 .map(equipamentoMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
+                .orElseThrow(() -> new ResourceNotFoundException("Equipamento", id));
     }
 
     public EquipamentoDTO save(EquipamentoDTO equipamentoDTO) {
@@ -40,20 +40,19 @@ public class EquipamentoService {
     }
 
     public EquipamentoDTO update(Integer id, EquipamentoDTO equipamentoDTO) {
-        if (equipamentoRepository.existsById(id)) {
-            Equipamento equipamento = equipamentoMapper.toEntity(equipamentoDTO);
-            equipamento.setIdEquipamento(id); // Garante que o ID não seja sobrescrito
-            Equipamento updatedEquipamento = equipamentoRepository.save(equipamento);
-            return equipamentoMapper.toDTO(updatedEquipamento);
+        if (!equipamentoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Equipamento", id);
         }
-        throw new ResourceNotFoundException(id);
+        Equipamento equipamento = equipamentoMapper.toEntity(equipamentoDTO);
+        equipamento.setIdEquipamento(id); // Garante que o ID não seja sobrescrito
+        Equipamento updatedEquipamento = equipamentoRepository.save(equipamento);
+        return equipamentoMapper.toDTO(updatedEquipamento);
     }
 
     public void delete(Integer id) {
-        if (equipamentoRepository.existsById(id)) {
-            equipamentoRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException(id);
+        if (!equipamentoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Equipamento", id);
         }
+        equipamentoRepository.deleteById(id);
     }
 }
