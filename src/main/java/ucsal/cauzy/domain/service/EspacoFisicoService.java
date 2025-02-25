@@ -33,6 +33,14 @@ public class EspacoFisicoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Espaço Físico", id));
     }
 
+    public EspacoFisicoDTO findByNumero(Integer numero) {
+        EspacoFisico espacoFisico = espacoFisicoRepository.findByNumero(numero);
+        if (espacoFisico == null) {
+            throw new ResourceNotFoundException("Espaço Físico com número " + numero, null);
+        }
+        return espacoFisicoMapper.toDTO(espacoFisico);
+    }
+
     public EspacoFisicoDTO save(EspacoFisicoDTO espacoFisicoDTO) {
         EspacoFisico espacoFisico = espacoFisicoMapper.toEntity(espacoFisicoDTO);
         EspacoFisico savedEspacoFisico = espacoFisicoRepository.save(espacoFisico);
