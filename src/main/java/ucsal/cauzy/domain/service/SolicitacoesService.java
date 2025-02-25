@@ -9,12 +9,11 @@ import ucsal.cauzy.domain.repository.EspacoFisicoRepository;
 import ucsal.cauzy.domain.repository.SolicitacoesRepository;
 import ucsal.cauzy.domain.repository.StatusRepository;
 import ucsal.cauzy.domain.repository.UsuarioRepository;
-import ucsal.cauzy.domain.service.exceptions.ResourceNotFoundException;
+import ucsal.cauzy.domain.utils.exceptions.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.SolicitacoesDTO;
 import ucsal.cauzy.rest.mapper.SolicitacoesMapper;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,7 +44,7 @@ public class SolicitacoesService {
     public SolicitacoesDTO findById(Integer id) {
         return solicitacoesRepository.findById(id)
                 .map(solicitacoesMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
+                .orElseThrow(() -> new ResourceNotFoundException("Solicitação", id));
     }
 
     public List<SolicitacoesDTO> findByUsuarioSolicitanteId(Integer id) {
@@ -64,11 +63,8 @@ public class SolicitacoesService {
     private Solicitacoes tratarSolicitacoes(SolicitacoesDTO solicitacoesDTO) {
         Solicitacoes solicitacoes = solicitacoesMapper.toEntity(solicitacoesDTO);
 
-        Usuario usuarioAvaliador = solicitacoesDTO.getIdUsuarioAvaliador() == null ? null :
-                usuarioRepository.findById(solicitacoesDTO.getIdUsuarioAvaliador()).orElse(null);
-
-        Status status = solicitacoesDTO.getIdStatus() == null ? null :
-                statusRepository.findById(solicitacoesDTO.getIdStatus()).orElse(null);
+        Usuario usuarioAvaliador =  usuarioRepository.findById(solicitacoesDTO.getIdUsuarioAvaliador()).orElse(null);
+        Status status = statusRepository.findById(solicitacoesDTO.getIdStatus()).orElse(null);
 
         solicitacoes.setUsuarioAvaliador(usuarioAvaliador);
         solicitacoes.setStatus(status);
@@ -76,20 +72,19 @@ public class SolicitacoesService {
     }
 
     public SolicitacoesDTO update(Integer id, SolicitacoesDTO solicitacoesDTO) {
-        if (solicitacoesRepository.existsById(id)) {
-            Solicitacoes solicitacoes = solicitacoesMapper.toEntity(solicitacoesDTO);
-            solicitacoes.setIdSolicitacoes(id); // Garante que o ID não seja sobrescrito
-            Solicitacoes updatedSolicitacoes = solicitacoesRepository.save(solicitacoes);
-            return solicitacoesMapper.toDTO(updatedSolicitacoes);
+        if (!solicitacoesRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Solicitação", id);
         }
-        throw new ResourceNotFoundException(id);
+        Solicitacoes solicitacoes = tratarSolicitacoes(solicitacoesDTO);
+        solicitacoes.setIdSolicitacoes(id);
+        Solicitacoes updatedSolicitacoes = solicitacoesRepository.save(solicitacoes);
+        return solicitacoesMapper.toDTO(updatedSolicitacoes);
     }
 
     public void delete(Integer id) {
-        if (solicitacoesRepository.existsById(id)) {
-            solicitacoesRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException(id);
+        if (!solicitacoesRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Solicitação", id);
         }
+        solicitacoesRepository.deleteById(id);
     }
 }
