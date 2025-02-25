@@ -4,12 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucsal.cauzy.domain.entity.LogAcoes;
 import ucsal.cauzy.domain.repository.LogAcoesRepository;
-import ucsal.cauzy.domain.service.exceptions.ResourceNotFoundException;
+import ucsal.cauzy.domain.utils.exceptions.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.LogAcoesDTO;
 import ucsal.cauzy.rest.mapper.LogAcoesMapper;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

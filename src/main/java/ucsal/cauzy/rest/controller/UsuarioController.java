@@ -15,8 +15,6 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
-    @Autowired
-    private CargoService cargoService;
 
     // GET /api/usuarios - Lista todos os usuarios
     @GetMapping

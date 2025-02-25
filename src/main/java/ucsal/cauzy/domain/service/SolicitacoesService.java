@@ -9,12 +9,11 @@ import ucsal.cauzy.domain.repository.EspacoFisicoRepository;
 import ucsal.cauzy.domain.repository.SolicitacoesRepository;
 import ucsal.cauzy.domain.repository.StatusRepository;
 import ucsal.cauzy.domain.repository.UsuarioRepository;
-import ucsal.cauzy.domain.service.exceptions.ResourceNotFoundException;
+import ucsal.cauzy.domain.utils.exceptions.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.SolicitacoesDTO;
 import ucsal.cauzy.rest.mapper.SolicitacoesMapper;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,7 +76,7 @@ public class SolicitacoesService {
 
     public SolicitacoesDTO update(Integer id, SolicitacoesDTO solicitacoesDTO) {
         if (solicitacoesRepository.existsById(id)) {
-            Solicitacoes solicitacoes = solicitacoesMapper.toEntity(solicitacoesDTO);
+            Solicitacoes solicitacoes = tratarSolicitacoes(solicitacoesDTO);
             solicitacoes.setIdSolicitacoes(id); // Garante que o ID não seja sobrescrito
             Solicitacoes updatedSolicitacoes = solicitacoesRepository.save(solicitacoes);
             return solicitacoesMapper.toDTO(updatedSolicitacoes);
