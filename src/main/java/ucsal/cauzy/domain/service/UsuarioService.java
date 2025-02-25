@@ -37,7 +37,7 @@ public class UsuarioService {
     public UsuarioDTO findByEmail(String email) {
         return usuarioRepository.findByEmail(email.trim())
                 .map(usuarioMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário", email.trim()));
+                .orElseThrow(() -> new ResourceNotFoundException("Email", email.trim()));
     }
 
     public void checkEmail(Usuario usuario, Integer id) {
