@@ -3,7 +3,10 @@ package ucsal.cauzy.domain.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucsal.cauzy.domain.entity.EspacoFisico;
+import ucsal.cauzy.domain.entity.Usuario;
 import ucsal.cauzy.domain.repository.EspacoFisicoRepository;
+import ucsal.cauzy.domain.utils.exceptions.DuplicateResourceException;
+import ucsal.cauzy.domain.utils.exceptions.EmailAlreadyExistsException;
 import ucsal.cauzy.domain.utils.exceptions.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.EspacoFisicoDTO;
 import ucsal.cauzy.rest.mapper.EspacoFisicoMapper;
@@ -43,6 +46,7 @@ public class EspacoFisicoService {
 
     public EspacoFisicoDTO save(EspacoFisicoDTO espacoFisicoDTO) {
         EspacoFisico espacoFisico = espacoFisicoMapper.toEntity(espacoFisicoDTO);
+        checkNumero(espacoFisico, null);
         EspacoFisico savedEspacoFisico = espacoFisicoRepository.save(espacoFisico);
         return espacoFisicoMapper.toDTO(savedEspacoFisico);
     }
@@ -52,9 +56,19 @@ public class EspacoFisicoService {
             throw new ResourceNotFoundException("Espaço Físico", id);
         }
         EspacoFisico espacoFisico = espacoFisicoMapper.toEntity(espacoFisicoDTO);
+        checkNumero(espacoFisico, id);
         espacoFisico.setIdEspacoFisico(id);
         EspacoFisico updatedEspacoFisico = espacoFisicoRepository.save(espacoFisico);
         return espacoFisicoMapper.toDTO(updatedEspacoFisico);
+    }
+
+    public void checkNumero(EspacoFisico sala, Integer id) {
+        espacoFisicoRepository.findByNumero(sala.getNumero())
+                .ifPresent(existingSala -> {
+                    if (!existingSala.getIdEspacoFisico().equals(id)) {
+                        throw new DuplicateResourceException("Esse numero da Sala", "numero", Integer.toString(existingSala.getNumero()));
+                    }
+                });
     }
 
     public void delete(Integer id) {
