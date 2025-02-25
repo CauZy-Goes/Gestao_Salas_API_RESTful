@@ -31,13 +31,13 @@ public class UsuarioService {
     public UsuarioDTO findById(Integer id) {
         return usuarioRepository.findById(id)
                 .map(usuarioMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário", id));
     }
 
     public UsuarioDTO findByEmail(String email) {
         return usuarioRepository.findByEmail(email.trim())
                 .map(usuarioMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException(email));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário", email.trim()));
     }
 
     public void checkEmail(Usuario usuario, Integer id) {
@@ -57,19 +57,19 @@ public class UsuarioService {
     }
 
     public UsuarioDTO update(Integer id, UsuarioDTO usuarioDTO) {
-        if (usuarioRepository.existsById(id)) {
-            Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
-            checkEmail(usuario, id);
-            usuario.setIdUsuario(id);
-            Usuario updatedUsuario = usuarioRepository.save(usuario);
-            return usuarioMapper.toDTO(updatedUsuario);
+        if (!usuarioRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Usuário", id);
         }
-        throw new ResourceNotFoundException(id);
+        Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
+        checkEmail(usuario, id);
+        usuario.setIdUsuario(id);
+        Usuario updatedUsuario = usuarioRepository.save(usuario);
+        return usuarioMapper.toDTO(updatedUsuario);
     }
 
     public void delete(Integer id) {
         if (!usuarioRepository.existsById(id)) {
-            throw new ResourceNotFoundException(id);
+            throw new ResourceNotFoundException("Usuário", id);
         }
         usuarioRepository.deleteById(id);
     }
