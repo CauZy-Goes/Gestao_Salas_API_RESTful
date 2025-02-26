@@ -65,7 +65,13 @@ public class EspacoFisicoService {
         }
         EspacoFisico espacoFisico = espacoFisicoMapper.toEntity(espacoFisicoDTO);
         checkNumero(espacoFisico, id);
+
+        TipoSala tipoSala = espacoFisicoDTO.getIdTipoSala() == null ? null :
+                tipoSalaRepository.findById(espacoFisicoDTO.getIdTipoSala()).orElse(null);
+
+        espacoFisico.setTipoSala(tipoSala);
         espacoFisico.setIdEspacoFisico(id);
+
         EspacoFisico updatedEspacoFisico = espacoFisicoRepository.save(espacoFisico);
         return espacoFisicoMapper.toDTO(updatedEspacoFisico);
     }
