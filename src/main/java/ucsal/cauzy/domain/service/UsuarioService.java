@@ -2,7 +2,9 @@ package ucsal.cauzy.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ucsal.cauzy.domain.entity.Cargo;
 import ucsal.cauzy.domain.entity.Usuario;
+import ucsal.cauzy.domain.repository.CargoRepository;
 import ucsal.cauzy.domain.repository.UsuarioRepository;
 import ucsal.cauzy.domain.utils.exceptions.EmailAlreadyExistsException;
 import ucsal.cauzy.domain.utils.exceptions.ResourceNotFoundException;
@@ -20,6 +22,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioMapper usuarioMapper;
+
+    @Autowired
+    CargoRepository cargoRepository;
 
     public List<UsuarioDTO> findAll() {
         return usuarioRepository.findAll()
@@ -52,6 +57,11 @@ public class UsuarioService {
     public UsuarioDTO save(UsuarioDTO usuarioDTO) {
         Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
         checkEmail(usuario, null);
+
+        Cargo cargo = usuarioDTO.getIdCargo() == null ? null :
+                cargoRepository.findById(usuarioDTO.getIdCargo()).orElse(null);
+
+        usuario.setCargo(cargo);
         Usuario savedUsuario = usuarioRepository.save(usuario);
         return usuarioMapper.toDTO(savedUsuario);
     }
