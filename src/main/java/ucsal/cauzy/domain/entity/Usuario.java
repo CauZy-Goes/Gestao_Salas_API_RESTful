@@ -24,6 +24,14 @@ public class Usuario implements Serializable {
     @JoinColumn(name = "idcargo", nullable = false)
     private Cargo cargo;
 
+	@PrePersist
+	public void prePersist() {
+		if (this.cargo == null) {
+			this.cargo = new Cargo();
+			this.cargo.setIdCargo(2); // Define o status "Professor" por padrão
+		}
+	}
+
 	public Integer getIdUsuario() {
 		return idUsuario;
 	}
