@@ -3,14 +3,7 @@ package ucsal.cauzy.domain.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "espaco_fisico")
@@ -26,6 +19,14 @@ public class EspacoFisico implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idtiposala", nullable = true)
     private TipoSala tipoSala;
+
+	@PrePersist
+	public void prePersist() {
+		if (this.tipoSala == null) {
+			this.tipoSala = new TipoSala();
+			this.tipoSala.setIdTipoSala(19); // Define o tipo da sala como "Não Classificado" por padrão
+		}
+	}
 
 	public Integer getIdEspacoFisico() {
 		return idEspacoFisico;
