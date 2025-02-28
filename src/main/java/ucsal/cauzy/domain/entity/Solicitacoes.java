@@ -12,6 +12,9 @@ public class Solicitacoes implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idSolicitacoes;
 
+    @Column(name = "descricao", nullable = true)
+    private String descricao;
+
     @Column(name = "data_hora_solicitacao", nullable = false)
     private LocalDateTime dataHoraSolicitacao;
 
@@ -107,6 +110,14 @@ public class Solicitacoes implements Serializable {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     @Override
