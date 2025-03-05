@@ -22,7 +22,10 @@ public class EmailService {
 
     public void enviarNotificacaoAlteracao(Solicitacoes solicitacao) {
         String emailProfessor = solicitacao.getUsuarioSolicitante().getEmail();
-        String assunto = "Notificação de Alteração na Solicitação de Sala";
+
+        String assunto = solicitacao.getStatus().getIdStatus().equals(1) ?  "Notificação de Alteração na Solicitação de Sala" :
+                "Sua solicitação foi " +  solicitacao.getStatus().getNomeStatus() +" !" ;
+
         String texto = "Olá " + solicitacao.getUsuarioSolicitante().getNomeUsuario() + ",\n\n" +
                 "Sua solicitação de sala foi atualizada. Detalhes:\n" +
                 "Descrição: " + solicitacao.getDescricao() + "\n" +
