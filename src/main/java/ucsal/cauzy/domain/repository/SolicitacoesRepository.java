@@ -17,5 +17,9 @@ public interface SolicitacoesRepository extends JpaRepository<Solicitacoes, Inte
     @Modifying
     @Query("DELETE FROM Solicitacoes s WHERE s.espacoFisico.idEspacoFisico = :idEspaco")
     void deleteByEspacoFisicoId(@Param("idEspaco") Integer idEspaco);
+
+    @Modifying
+    @Query("DELETE FROM Solicitacoes s WHERE s.usuarioAvaliador.idUsuario = :idUsuario OR s.usuarioSolicitante.idUsuario = :idUsuario")
+    void deleteByUsuarioId(@Param("idUsuario") Integer idUsuario);
 }
 
