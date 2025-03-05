@@ -2,10 +2,12 @@ package ucsal.cauzy.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ucsal.cauzy.domain.entity.EspacoFisico;
 import ucsal.cauzy.domain.entity.TipoSala;
 import ucsal.cauzy.domain.entity.Usuario;
 import ucsal.cauzy.domain.repository.EspacoFisicoRepository;
+import ucsal.cauzy.domain.repository.SolicitacoesRepository;
 import ucsal.cauzy.domain.repository.TipoSalaRepository;
 import ucsal.cauzy.domain.utils.exceptions.DuplicateResourceException;
 import ucsal.cauzy.domain.utils.exceptions.EmailAlreadyExistsException;
@@ -23,7 +25,11 @@ public class EspacoFisicoService {
     private EspacoFisicoRepository espacoFisicoRepository;
 
     @Autowired
+    private SolicitacoesRepository solicitacoesRepository;
+
+    @Autowired
     private EspacoFisicoMapper espacoFisicoMapper;
+
     @Autowired
     private TipoSalaRepository tipoSalaRepository;
 
@@ -85,10 +91,13 @@ public class EspacoFisicoService {
                 });
     }
 
+    @Transactional
     public void delete(Integer id) {
         if (!espacoFisicoRepository.existsById(id)) {
             throw new ResourceNotFoundException("Espaço Físico", id);
         }
+
+        solicitacoesRepository.deleteByEspacoFisicoId(id);
         espacoFisicoRepository.deleteById(id);
     }
 }
