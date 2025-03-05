@@ -32,8 +32,13 @@ public class UsuarioController {
     // GET /api/usarios/email/{email} = Retorna um usuario por email
     @GetMapping("/email/{email}")
     public ResponseEntity<UsuarioDTO> getUsuarioByEmail(@PathVariable String email) {
-        return ResponseEntity.ok().body(usuarioService.findByEmail(email));
+        if (email == null || email.trim().isEmpty()) {
+            return ResponseEntity.badRequest().build(); // 400 Bad Request
+        }
+
+        return ResponseEntity.ok(usuarioService.findByEmail(email.trim()));
     }
+
 
     // POST /api/usuarios - Cria um novo usuario
     @PostMapping
