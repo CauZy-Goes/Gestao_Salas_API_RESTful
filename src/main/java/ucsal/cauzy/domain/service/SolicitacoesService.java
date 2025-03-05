@@ -34,6 +34,9 @@ public class SolicitacoesService {
     @Autowired
     private StatusRepository statusRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     public List<SolicitacoesDTO> findAll() {
         return solicitacoesRepository.findAll()
                 .stream()
@@ -81,6 +84,9 @@ public class SolicitacoesService {
         Solicitacoes solicitacoes = tratarSolicitacoes(solicitacoesDTO);
         solicitacoes.setIdSolicitacoes(id);
         Solicitacoes updatedSolicitacoes = solicitacoesRepository.save(solicitacoes);
+
+        emailService.enviarNotificacaoAlteracao(updatedSolicitacoes);
+
         return solicitacoesMapper.toDTO(updatedSolicitacoes);
     }
 
