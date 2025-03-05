@@ -2,16 +2,17 @@ package ucsal.cauzy.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ucsal.cauzy.domain.entity.Cargo;
 import ucsal.cauzy.domain.entity.Usuario;
-import ucsal.cauzy.domain.repository.CargoRepository;
-import ucsal.cauzy.domain.repository.UsuarioRepository;
+import ucsal.cauzy.domain.repository.*;
 import ucsal.cauzy.domain.utils.exceptions.EmailAlreadyExistsException;
 import ucsal.cauzy.domain.utils.exceptions.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.UsuarioDTO;
 import ucsal.cauzy.rest.mapper.UsuarioMapper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,10 +22,18 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private LogAcoesRepository logAcoesRepository;
+
+    @Autowired
+    private EspacoFisicoRepository espacoFisicoRepository;
+
+    @Autowired
     private UsuarioMapper usuarioMapper;
 
     @Autowired
     CargoRepository cargoRepository;
+    @Autowired
+    private SolicitacoesRepository solicitacoesRepository;
 
     public List<UsuarioDTO> findAll() {
         return usuarioRepository.findAll()
@@ -39,11 +48,16 @@ public class UsuarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário", id));
     }
 
+
     public UsuarioDTO findByEmail(String email) {
-        return usuarioRepository.findByEmail(email.trim())
+        return Optional.ofNullable(email)
+                .map(String::trim)
+                .filter(e -> !e.isEmpty()) // Evita strings vazias
+                .flatMap(usuarioRepository::findByEmail)
                 .map(usuarioMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Email", email.trim()));
+                .orElseThrow(() -> new ResourceNotFoundException("Email " ,email));
     }
+
 
     public void checkEmail(Usuario usuario, Integer id) {
         usuarioRepository.findByEmail(usuario.getEmail())
@@ -77,10 +91,13 @@ public class UsuarioService {
         return usuarioMapper.toDTO(updatedUsuario);
     }
 
+    @Transactional
     public void delete(Integer id) {
         if (!usuarioRepository.existsById(id)) {
             throw new ResourceNotFoundException("Usuário", id);
         }
+        logAcoesRepository.deleteByUsuarioId(id);
+        solicitacoesRepository.deleteByUsuarioId(id);
         usuarioRepository.deleteById(id);
     }
 }
