@@ -1,10 +1,17 @@
 package ucsal.cauzy.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.io.Serializable;
 
 @Entity
 @Table(name = "usuario")
+@Getter
+@Setter
+@ToString
 public class Usuario implements Serializable {
 
     @Id
@@ -32,55 +39,44 @@ public class Usuario implements Serializable {
 		}
 	}
 
-	public Integer getIdUsuario() {
-		return idUsuario;
-	}
+//	public Integer getIdUsuario() {
+//		return idUsuario;
+//	}
+//
+//	public void setIdUsuario(Integer idUsuario) {
+//		this.idUsuario = idUsuario;
+//	}
 
-	public void setIdUsuario(Integer idusuario) {
-		this.idUsuario = idusuario;
-	}
-
-	public String getNomeUsuario() {
-		return nomeUsuario;
-	}
-
-	public void setNomeUsuario(String nomeUsuario) {
-		this.nomeUsuario = nomeUsuario;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public Cargo getCargo() {
-		return cargo;
-	}
-
-	public void setCargo(Cargo cargo) {
-		this.cargo = cargo;
-	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-	@Override
-	public String toString() {
-		return "Usuario{" +
-				"idUsuario=" + idUsuario +
-				", nomeUsuario='" + nomeUsuario + '\'' +
-				", email='" + email + '\'' +
-				", senha='" + senha + '\'' +
-				", cargo=" + cargo +
-				'}';
-	}
+//	public String getNomeUsuario() {
+//		return nomeUsuario;
+//	}
+//
+//	public void setNomeUsuario(String nomeUsuario) {
+//		this.nomeUsuario = nomeUsuario;
+//	}
+//
+//	public String getEmail() {
+//		return email;
+//	}
+//
+//	public void setEmail(String email) {
+//		this.email = email;
+//	}
+//
+//	public String getSenha() {
+//		return senha;
+//	}
+//
+//	public void setSenha(String senha) {
+//		this.senha = senha;
+//	}
+//
+//	public Cargo getCargo() {
+//		return cargo;
+//	}
+//
+//	public void setCargo(Cargo cargo) {
+//		this.cargo = cargo;
+//	}
 }
 
