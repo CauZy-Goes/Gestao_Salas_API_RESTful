@@ -1,10 +1,17 @@
 package ucsal.cauzy.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.io.Serializable;
 
 @Entity
 @Table(name = "equipamento")
+@Getter
+@Setter
+@ToString
 public class Equipamento implements Serializable {
 
     @Id
@@ -18,34 +25,34 @@ public class Equipamento implements Serializable {
     @JoinColumn(name = "idespacofisico")
     private EspacoFisico espacoFisico;
 
-	public Integer getIdEquipamento() {
-		return idEquipamento;
-	}
-
-	public void setIdEquipamento(Integer idEquipamento) {
-		this.idEquipamento = idEquipamento;
-	}
-
-	public String getNomeEquipamento() {
-		return nomeEquipamento;
-	}
-
-	public void setNomeEquipamento(String nomeEquipamento) {
-		this.nomeEquipamento = nomeEquipamento;
-	}
-
-	public EspacoFisico getEspacoFisico() {
-		return espacoFisico;
-	}
-
-	public void setEspacoFisico(EspacoFisico espacoFisico) {
-		this.espacoFisico = espacoFisico;
-	}
-
-	@Override
-	public String toString() {
-		return "Equipamento [idequipamento=" + idEquipamento + ", nomeEquipamento=" + nomeEquipamento
-				+ ", espacoFisico=" + espacoFisico + "]";
-	}
+//	public Integer getIdEquipamento() {
+//		return idEquipamento;
+//	}
+//
+//	public void setIdEquipamento(Integer idEquipamento) {
+//		this.idEquipamento = idEquipamento;
+//	}
+//
+//	public String getNomeEquipamento() {
+//		return nomeEquipamento;
+//	}
+//
+//	public void setNomeEquipamento(String nomeEquipamento) {
+//		this.nomeEquipamento = nomeEquipamento;
+//	}
+//
+//	public EspacoFisico getEspacoFisico() {
+//		return espacoFisico;
+//	}
+//
+//	public void setEspacoFisico(EspacoFisico espacoFisico) {
+//		this.espacoFisico = espacoFisico;
+//	}
+//
+//	@Override
+//	public String toString() {
+//		return "Equipamento [idequipamento=" + idEquipamento + ", nomeEquipamento=" + nomeEquipamento
+//				+ ", espacoFisico=" + espacoFisico + "]";
+//	}
 }
 
