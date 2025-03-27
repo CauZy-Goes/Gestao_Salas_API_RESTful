@@ -1,11 +1,18 @@
 package ucsal.cauzy.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "solicitacoes")
+@Getter
+@Setter
+@ToString
 public class Solicitacoes implements Serializable {
 
     @Id
@@ -48,83 +55,83 @@ public class Solicitacoes implements Serializable {
         }
     }
 
-    public Integer getIdSolicitacoes() {
-        return idSolicitacoes;
-    }
-
-    public void setIdSolicitacoes(Integer idsolicitacoes) {
-        this.idSolicitacoes = idsolicitacoes;
-    }
-
-    public LocalDateTime getDataHoraSolicitacao() {
-        return dataHoraSolicitacao;
-    }
-
-    public void setDataHoraSolicitacao(LocalDateTime dataHoraSolicitacao) {
-        this.dataHoraSolicitacao = dataHoraSolicitacao;
-    }
-
-    public LocalDateTime getDataHoraAprovacao() {
-        return dataHoraAprovacao;
-    }
-
-    public void setDataHoraAprovacao(LocalDateTime dataHoraAprovacao) {
-        this.dataHoraAprovacao = dataHoraAprovacao;
-    }
-
-    public LocalDateTime getDataHoraLocacao() { // Getter da nova coluna
-        return dataHoraLocacao;
-    }
-
-    public void setDataHoraLocacao(LocalDateTime dataHoraLocacao) { // Setter da nova coluna
-        this.dataHoraLocacao = dataHoraLocacao;
-    }
-
-    public Usuario getUsuarioAvaliador() {
-        return usuarioAvaliador;
-    }
-
-    public void setUsuarioAvaliador(Usuario usuarioAvaliador) {
-        this.usuarioAvaliador = usuarioAvaliador;
-    }
-
-    public Usuario getUsuarioSolicitante() {
-        return usuarioSolicitante;
-    }
-
-    public void setUsuarioSolicitante(Usuario usuarioSolicitante) {
-        this.usuarioSolicitante = usuarioSolicitante;
-    }
-
-    public EspacoFisico getEspacoFisico() {
-        return espacoFisico;
-    }
-
-    public void setEspacoFisico(EspacoFisico espacoFisico) {
-        this.espacoFisico = espacoFisico;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    @Override
-    public String toString() {
-        return "Solicitacoes [idsolicitacoes=" + idSolicitacoes + ", dataHoraSolicitacao=" + dataHoraSolicitacao
-                + ", dataHoraAprovacao=" + dataHoraAprovacao + ", dataHoraLocacao=" + dataHoraLocacao
-                + ", usuarioAvaliador=" + usuarioAvaliador + ", usuarioSolicitante=" + usuarioSolicitante
-                + ", espacoFisico=" + espacoFisico + ", status=" + status + "]";
-    }
+//    public Integer getIdSolicitacoes() {
+//        return idSolicitacoes;
+//    }
+//
+//    public void setIdSolicitacoes(Integer idsolicitacoes) {
+//        this.idSolicitacoes = idsolicitacoes;
+//    }
+//
+//    public LocalDateTime getDataHoraSolicitacao() {
+//        return dataHoraSolicitacao;
+//    }
+//
+//    public void setDataHoraSolicitacao(LocalDateTime dataHoraSolicitacao) {
+//        this.dataHoraSolicitacao = dataHoraSolicitacao;
+//    }
+//
+//    public LocalDateTime getDataHoraAprovacao() {
+//        return dataHoraAprovacao;
+//    }
+//
+//    public void setDataHoraAprovacao(LocalDateTime dataHoraAprovacao) {
+//        this.dataHoraAprovacao = dataHoraAprovacao;
+//    }
+//
+//    public LocalDateTime getDataHoraLocacao() { // Getter da nova coluna
+//        return dataHoraLocacao;
+//    }
+//
+//    public void setDataHoraLocacao(LocalDateTime dataHoraLocacao) { // Setter da nova coluna
+//        this.dataHoraLocacao = dataHoraLocacao;
+//    }
+//
+//    public Usuario getUsuarioAvaliador() {
+//        return usuarioAvaliador;
+//    }
+//
+//    public void setUsuarioAvaliador(Usuario usuarioAvaliador) {
+//        this.usuarioAvaliador = usuarioAvaliador;
+//    }
+//
+//    public Usuario getUsuarioSolicitante() {
+//        return usuarioSolicitante;
+//    }
+//
+//    public void setUsuarioSolicitante(Usuario usuarioSolicitante) {
+//        this.usuarioSolicitante = usuarioSolicitante;
+//    }
+//
+//    public EspacoFisico getEspacoFisico() {
+//        return espacoFisico;
+//    }
+//
+//    public void setEspacoFisico(EspacoFisico espacoFisico) {
+//        this.espacoFisico = espacoFisico;
+//    }
+//
+//    public Status getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(Status status) {
+//        this.status = status;
+//    }
+//
+//    public String getDescricao() {
+//        return descricao;
+//    }
+//
+//    public void setDescricao(String descricao) {
+//        this.descricao = descricao;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "Solicitacoes [idsolicitacoes=" + idSolicitacoes + ", dataHoraSolicitacao=" + dataHoraSolicitacao
+//                + ", dataHoraAprovacao=" + dataHoraAprovacao + ", dataHoraLocacao=" + dataHoraLocacao
+//                + ", usuarioAvaliador=" + usuarioAvaliador + ", usuarioSolicitante=" + usuarioSolicitante
+//                + ", espacoFisico=" + espacoFisico + ", status=" + status + "]";
+//    }
 }
