@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 public record CargoDTO(
         @Schema(description = "Identificador único do cargo")
         Integer idCargo,
+
         @NotBlank(message = "campo obrigatorio")
         @Size(min = 2, max = 100, message = "campo fora do tamanho padrao")
         @Schema(name = "nome do cargo")
