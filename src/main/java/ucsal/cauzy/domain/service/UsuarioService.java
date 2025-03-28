@@ -72,8 +72,8 @@ public class UsuarioService {
         Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
         checkEmail(usuario, null);
 
-        Cargo cargo = usuarioDTO.getIdCargo() == null ? null :
-                cargoRepository.findById(usuarioDTO.getIdCargo()).orElse(null);
+        Cargo cargo = usuarioDTO.idCargo() == null ? null :
+                cargoRepository.findById(usuarioDTO.idCargo()).orElse(null);
 
         usuario.setCargo(cargo);
         Usuario savedUsuario = usuarioRepository.save(usuario);
