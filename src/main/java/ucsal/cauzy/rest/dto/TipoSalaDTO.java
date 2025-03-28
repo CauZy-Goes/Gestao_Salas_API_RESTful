@@ -1,28 +1,17 @@
 package ucsal.cauzy.rest.dto;
 
-public class TipoSalaDTO {
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-    private Integer idTipoSala;
-    private String nomeSala;
+@Schema(name = "TipoSala")
+public record TipoSalaDTO(
+        @Schema(description = "Identificador único do tipo de sala")
+        Integer idTipoSala,
 
-    public Integer getIdTipoSala() {
-        return idTipoSala;
-    }
-
-    public void setIdTipoSala(Integer idTipoSala) {
-        this.idTipoSala = idTipoSala;
-    }
-
-    public String getNomeSala() {
-        return nomeSala;
-    }
-
-    public void setNomeSala(String nomeSala) {
-        this.nomeSala = nomeSala;
-    }
-
-    @Override
-    public String toString() {
-        return "TipoSalaDTO [idTipoSala=" + idTipoSala + ", nomeSala=" + nomeSala + "]";
-    }
+        @NotBlank(message = "Campo obrigatorio")
+        @Size(min = 2, max = 100, message = "campo fora do tamanho padrao")
+        @Schema(description = "Nome da sala")
+        String nomeSala
+) {
 }
