@@ -1,96 +1,41 @@
 package ucsal.cauzy.rest.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-public class SolicitacoesDTO {
+@Schema(name = "Solicitacoes")
+public record SolicitacoesDTO(
+        @Schema(description = "Identificador único da solicitação")
+        Integer idSolicitacoes,
 
-    private Integer idSolicitacoes;
-    private String descricao;
-    private LocalDateTime dataHoraSolicitacao;
-    private LocalDateTime dataHoraAprovacao;
-    private LocalDateTime dataHoraLocacao;
-    private Integer idUsuarioAvaliador;
-    private Integer idUsuarioSolicitante;
-    private Integer idEspacoFisico;
-    private Integer idStatus;
+        @Schema(description = "Descrição da solicitação")
+        String descricao,
 
-    public Integer getIdSolicitacoes() {
-        return idSolicitacoes;
-    }
+        @NotNull(message = "Campo obrigatório")
+        @Schema(description = "Data e hora da solicitação")
+        LocalDateTime dataHoraSolicitacao,
 
-    public void setIdSolicitacoes(Integer idSolicitacoes) {
-        this.idSolicitacoes = idSolicitacoes;
-    }
+        @Schema(description = "Data e hora da aprovação da solicitação")
+        LocalDateTime dataHoraAprovacao,
 
-    public String getDescricao() {
-        return descricao;
-    }
+        @NotNull(message = "Campo obrigatório")
+        @Schema(description = "Data e hora da locação do espaço físico")
+        LocalDateTime dataHoraLocacao,
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+        @Schema(description = "Identificador do avaliador da solicitação")
+        Integer idUsuarioAvaliador,
 
-    public LocalDateTime getDataHoraSolicitacao() {
-        return dataHoraSolicitacao;
-    }
+        @NotNull(message = "Campo obrigatório")
+        @Schema(description = "Identificador do solicitante da solicitação")
+        Integer idUsuarioSolicitante,
 
-    public void setDataHoraSolicitacao(LocalDateTime dataHoraSolicitacao) {
-        this.dataHoraSolicitacao = dataHoraSolicitacao;
-    }
+        @NotNull(message = "Campo obrigatório")
+        @Schema(description = "Identificador do espaço físico associado à solicitação")
+        Integer idEspacoFisico,
 
-    public LocalDateTime getDataHoraAprovacao() {
-        return dataHoraAprovacao;
-    }
-
-    public void setDataHoraAprovacao(LocalDateTime dataHoraAprovacao) {
-        this.dataHoraAprovacao = dataHoraAprovacao;
-    }
-
-    public LocalDateTime getDataHoraLocacao() {
-        return dataHoraLocacao;
-    }
-
-    public void setDataHoraLocacao(LocalDateTime dataHoraLocacao) {
-        this.dataHoraLocacao = dataHoraLocacao;
-    }
-
-    public Integer getIdUsuarioAvaliador() {
-        return idUsuarioAvaliador;
-    }
-
-    public void setIdUsuarioAvaliador(Integer idUsuarioAvaliador) {
-        this.idUsuarioAvaliador = idUsuarioAvaliador;
-    }
-
-    public Integer getIdUsuarioSolicitante() {
-        return idUsuarioSolicitante;
-    }
-
-    public void setIdUsuarioSolicitante(Integer idUsuarioSolicitante) {
-        this.idUsuarioSolicitante = idUsuarioSolicitante;
-    }
-
-    public Integer getIdEspacoFisico() {
-        return idEspacoFisico;
-    }
-
-    public void setIdEspacoFisico(Integer idEspacoFisico) {
-        this.idEspacoFisico = idEspacoFisico;
-    }
-
-    public Integer getIdStatus() {
-        return idStatus;
-    }
-
-    public void setIdStatus(Integer idStatus) {
-        this.idStatus = idStatus;
-    }
-
-    @Override
-    public String toString() {
-        return "SolicitacoesDTO [idSolicitacoes=" + idSolicitacoes + ", dataHoraSolicitacao=" + dataHoraSolicitacao
-                + ", dataHoraAprovacao=" + dataHoraAprovacao + ", dataHoraLocacao=" + dataHoraLocacao
-                + ", idUsuarioAvaliador=" + idUsuarioAvaliador + ", idUsuarioSolicitante=" + idUsuarioSolicitante
-                + ", idEspacoFisico=" + idEspacoFisico + ", idStatus=" + idStatus + "]";
-    }
+        @NotNull(message = "Campo obrigatório")
+        @Schema(description = "Identificador do status da solicitação")
+        Integer idStatus
+) {
 }

@@ -56,8 +56,8 @@ public class EspacoFisicoService {
         EspacoFisico espacoFisico = espacoFisicoMapper.toEntity(espacoFisicoDTO);
         checkNumero(espacoFisico, null);
 
-        TipoSala tipoSala = espacoFisicoDTO.getIdTipoSala() == null ? null :
-                tipoSalaRepository.findById(espacoFisicoDTO.getIdTipoSala()).orElse(null);
+        TipoSala tipoSala = espacoFisicoDTO.idTipoSala() == null ? null :
+                tipoSalaRepository.findById(espacoFisicoDTO.idTipoSala()).orElse(null);
 
         espacoFisico.setTipoSala(tipoSala);
 
@@ -72,8 +72,8 @@ public class EspacoFisicoService {
         EspacoFisico espacoFisico = espacoFisicoMapper.toEntity(espacoFisicoDTO);
         checkNumero(espacoFisico, id);
 
-        TipoSala tipoSala = espacoFisicoDTO.getIdTipoSala() == null ? null :
-                tipoSalaRepository.findById(espacoFisicoDTO.getIdTipoSala()).orElse(null);
+        TipoSala tipoSala = espacoFisicoDTO.idTipoSala() == null ? null :
+                tipoSalaRepository.findById(espacoFisicoDTO.idTipoSala()).orElse(null);
 
         espacoFisico.setTipoSala(tipoSala);
         espacoFisico.setIdEspacoFisico(id);

@@ -1,31 +1,20 @@
 package ucsal.cauzy.rest.dto;
 
-public class EquipamentoDTO {
-    private Integer idEquipamento;
-    private String nomeEquipamento;
-    private Integer idEspacoFisico;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-    public Integer getIdEquipamento() {
-        return idEquipamento;
-    }
+@Schema(name = "Equipamento")
+public record EquipamentoDTO(
+        @Schema(description = "Identificador único do equipamento")
+        Integer idEquipamento,
 
-    public void setIdEquipamento(Integer id) {
-        this.idEquipamento = id;
-    }
+        @NotBlank(message = "Campo obrigatório")
+        @Schema(description = "Nome do equipamento")
+        String nomeEquipamento,
 
-    public String getNomeEquipamento() {
-        return nomeEquipamento;
-    }
-
-    public void setNomeEquipamento(String nomeEquipamento) {
-        this.nomeEquipamento = nomeEquipamento;
-    }
-
-    public Integer getIdEspacoFisico() {
-        return idEspacoFisico;
-    }
-
-    public void setIdEspacoFisico(Integer idEspacoFisico) {
-        this.idEspacoFisico = idEspacoFisico;
-    }
+        @NotNull(message = "Campo obrigatório")
+        @Schema(description = "Identificador do espaço físico onde o equipamento está localizado")
+        Integer idEspacoFisico
+) {
 }

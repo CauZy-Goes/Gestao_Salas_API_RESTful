@@ -1,61 +1,32 @@
 package ucsal.cauzy.rest.dto;
 
-public class UsuarioDTO {
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-    private Integer idUsuario;
-    private String nomeUsuario;
-    private String email;
-    private String senha;
-    private Integer idCargo;
+@Schema(name = "Usuario")
+public record UsuarioDTO(
+        @Schema(description = "Identificador único do usuário")
+        Integer idUsuario,
 
-    public String getSenha() {
-        return senha;
-    }
+        @NotBlank(message = "Campo obrigatório")
+        @Size(min = 2, max = 50, message = "Fora Do Tamanho Padrao")
+        @Schema(description = "Nome completo do usuário")
+        String nomeUsuario,
 
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
+        @NotBlank(message = "Campo obrigatório")
+        @Email(message = "Email inválido")
+        @Schema(description = "Email do usuário")
+        String email,
 
-    public Integer getIdUsuario() {
-        return idUsuario;
-    }
+        @NotBlank(message = "Campo obrigatório")
+        @Schema(description = "Senha do usuário")
+        String senha,
 
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public String getNomeUsuario() {
-        return nomeUsuario;
-    }
-
-    public void setNomeUsuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Integer getIdCargo() {
-        return idCargo;
-    }
-
-    public void setIdCargo(Integer idCargo) {
-        this.idCargo = idCargo;
-    }
-
-    @Override
-    public String toString() {
-        return "UsuarioDTO{" +
-                "idUsuario=" + idUsuario +
-                ", nomeUsuario='" + nomeUsuario + '\'' +
-                ", email='" + email + '\'' +
-                ", senha='" + senha + '\'' +
-                ", idCargo=" + idCargo +
-                '}';
-    }
+        @NotNull(message = "Campo obrigatório")
+        @Schema(description = "Identificador do cargo do usuário")
+        Integer idCargo
+) {
 }

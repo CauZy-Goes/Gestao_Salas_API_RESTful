@@ -1,38 +1,18 @@
 package ucsal.cauzy.rest.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 
-public class EspacoFisicoDTO {
+@Schema(name = "EspacoFisico")
+public record EspacoFisicoDTO(
+        @Schema(description = "Identificador único do espaço físico")
+        Integer idEspacoFisico,
 
-    private Integer idEspacoFisico;
-    private Integer numero;
-    private Integer idTipoSala;
+        @NotNull(message = "Campo obrigatório")
+        @Schema(description = "Número do espaço físico")
+        Integer numero,
 
-    public Integer getIdEspacoFisico() {
-        return idEspacoFisico;
-    }
-
-    public void setIdEspacoFisico(Integer idEspacoFisico) {
-        this.idEspacoFisico = idEspacoFisico;
-    }
-
-    public Integer getNumero() {
-        return numero;
-    }
-
-    public void setNumero(Integer numero) {
-        this.numero = numero;
-    }
-
-    public Integer getIdTipoSala() {
-        return idTipoSala;
-    }
-
-    public void setIdTipoSala(Integer idTipoSala) {
-        this.idTipoSala = idTipoSala;
-    }
-
-    @Override
-    public String toString() {
-        return "EspacoFisicoDTO [idEspacoFisico=" + idEspacoFisico + ", numero=" + numero + ", idTipoSala=" + idTipoSala + "]";
-    }
+        @Schema(description = "Identificador do tipo de sala")
+        Integer idTipoSala
+) {
 }

@@ -1,25 +1,17 @@
 package ucsal.cauzy.rest.dto;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-public class CargoDTO {
-    private Integer idCargo;
-    private String nomeCargo;
+@Schema(name = "Cargo")
+public record CargoDTO(
+        @Schema(description = "Identificador único do cargo")
+        Integer idCargo,
 
-    // Getters e Setters
-    public Integer getIdCargo() {
-        return idCargo;
-    }
-
-    public void setIdCargo(Integer idCargo) {
-        this.idCargo = idCargo;
-    }
-
-    public String getNomeCargo() {
-        return nomeCargo;
-    }
-
-    public void setNomeCargo(String nomeCargo) {
-        this.nomeCargo = nomeCargo;
-    }
+        @NotBlank(message = "campo obrigatorio")
+        @Size(min = 2, max = 100, message = "campo fora do tamanho padrao")
+        @Schema(name = "nome do cargo")
+        String nomeCargo
+        ) {
 }

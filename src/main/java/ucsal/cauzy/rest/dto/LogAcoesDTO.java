@@ -1,48 +1,24 @@
 package ucsal.cauzy.rest.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-public class LogAcoesDTO {
+@Schema(name = "LogAcoes")
+public record LogAcoesDTO(
+        @Schema(description = "Identificador único do log de ação")
+        Integer idLogAcoes,
 
-    private Integer idLogAcoes;
-    private LocalDateTime dataHora;
-    private Integer idUsuario;
-    private String acao;
+        @NotNull(message = "Campo obrigatório")
+        @Schema(description = "Data e hora da ação registrada")
+        LocalDateTime dataHora,
 
-    public Integer getIdLogAcoes() {
-        return idLogAcoes;
-    }
+        @NotNull(message = "Campo obrigatório")
+        @Schema(description = "Identificador do usuário que executou a ação")
+        Integer idUsuario,
 
-    public void setIdLogAcoes(Integer idLogAcoes) {
-        this.idLogAcoes = idLogAcoes;
-    }
-
-    public LocalDateTime getDataHora() {
-        return dataHora;
-    }
-
-    public void setDataHora(LocalDateTime dataHora) {
-        this.dataHora = dataHora;
-    }
-
-    public Integer getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public String getAcao() {
-        return acao;
-    }
-
-    public void setAcao(String acao) {
-        this.acao = acao;
-    }
-
-    @Override
-    public String toString() {
-        return "LogAcoesDTO [idLogAcoes=" + idLogAcoes + ", dataHora=" + dataHora + ", idUsuario=" + idUsuario + ", acao=" + acao + "]";
-    }
+        @NotNull(message = "Campo obrigatório")
+        @Schema(description = "Descrição da ação executada")
+        String acao
+) {
 }
