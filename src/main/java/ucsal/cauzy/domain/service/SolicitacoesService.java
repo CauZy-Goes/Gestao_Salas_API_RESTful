@@ -66,11 +66,11 @@ public class SolicitacoesService {
     private Solicitacoes tratarSolicitacoes(SolicitacoesDTO solicitacoesDTO) {
         Solicitacoes solicitacoes = solicitacoesMapper.toEntity(solicitacoesDTO);
 
-        Usuario usuarioAvaliador = solicitacoesDTO.getIdUsuarioAvaliador() == null ? null :
-                usuarioRepository.findById(solicitacoesDTO.getIdUsuarioAvaliador()).orElse(null);
+        Usuario usuarioAvaliador = solicitacoesDTO.idUsuarioAvaliador() == null ? null :
+                usuarioRepository.findById(solicitacoesDTO.idUsuarioAvaliador()).orElse(null);
 
-        Status status = solicitacoesDTO.getIdStatus() == null ? null :
-                statusRepository.findById(solicitacoesDTO.getIdStatus()).orElse(null);
+        Status status = solicitacoesDTO.idStatus() == null ? null :
+                statusRepository.findById(solicitacoesDTO.idStatus()).orElse(null);
 
         solicitacoes.setUsuarioAvaliador(usuarioAvaliador);
         solicitacoes.setStatus(status);
