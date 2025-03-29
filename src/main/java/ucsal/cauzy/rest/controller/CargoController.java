@@ -1,19 +1,27 @@
 package ucsal.cauzy.rest.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ucsal.cauzy.domain.service.CargoService;
 import ucsal.cauzy.rest.dto.CargoDTO;
+import ucsal.cauzy.rest.mapper.CargoMapper;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cargos")
-public class CargoController {
+@RequestMapping("cargos")
+@RequiredArgsConstructor
+@Tag(name = "Autores")
+@Slf4j
+public class CargoController implements GenericController {
 
-    @Autowired
-    private CargoService cargoService;
+    private final CargoService cargoService;
+
+    private final CargoMapper cargoMapper;
 
     // GET /api/cargos - Lista todos os cargos
     @GetMapping
