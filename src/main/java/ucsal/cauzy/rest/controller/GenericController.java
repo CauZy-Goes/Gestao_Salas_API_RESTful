@@ -6,6 +6,7 @@ import java.net.URI;
 
 public interface GenericController {
 
+//    Uma URI (Uniform Resource Identifier)
     default URI gerarHeaderLocation(Integer id){
         return ServletUriComponentsBuilder
                 .fromCurrentRequest()

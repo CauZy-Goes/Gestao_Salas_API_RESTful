@@ -5,15 +5,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ucsal.cauzy.domain.entity.Cargo;
 import ucsal.cauzy.domain.service.CargoService;
 import ucsal.cauzy.rest.dto.CargoDTO;
 import ucsal.cauzy.rest.mapper.CargoMapper;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -43,7 +46,6 @@ public class CargoController implements GenericController {
         return ResponseEntity.ok(resultado);
     }
 
-    // GET /api/cargos/{id} - Retorna um cargo por ID
     @GetMapping("/{id}")
     @Operation(summary = "Obter Por ID", description = "Pesquisar Cargo por ID")
     @ApiResponses({
@@ -57,11 +59,18 @@ public class CargoController implements GenericController {
         return ResponseEntity.ok(cargoResultado);
     }
 
-    // POST /api/cargos - Cria um novo cargo
     @PostMapping
-    public ResponseEntity<CargoDTO> createCargo(@RequestBody CargoDTO cargoDTO) {
-        CargoDTO createdCargo = cargoService.save(cargoDTO);
-        return ResponseEntity.ok(createdCargo);
+    @Operation(summary = "Criar ", description = "Criar um Cargo")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Autor encontrado."),
+    })
+    public ResponseEntity<CargoDTO> createCargo(@RequestBody @Valid CargoDTO cargoDTO) {
+        log.info("Cadastrando novo cargo: {}", cargoDTO.nomeCargo());
+
+        Cargo cargo = cargoMapper.toEntity(cargoDTO);
+        cargoService.save(cargo);
+        URI location = gerarHeaderLocation(cargo.getIdCargo());
+        return ResponseEntity.created(location).build();
     }
 
     // PUT /api/cargos/{id} - Atualiza um cargo existente

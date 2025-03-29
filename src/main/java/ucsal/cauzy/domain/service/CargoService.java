@@ -31,10 +31,8 @@ public class CargoService {
                 .orElseThrow(() -> new NotFoundException("Cargo não encontrado com o id " + id));
     }
 
-    public CargoDTO save(CargoDTO cargoDTO) {
-        Cargo cargo = cargoMapper.toEntity(cargoDTO);
-        Cargo savedCargo = cargoRepository.save(cargo);
-        return cargoMapper.toDTO(savedCargo);
+    public Cargo save(Cargo cargo) {
+        return cargoRepository.save(cargo);
     }
 
     public CargoDTO update(Integer id, CargoDTO cargoDTO) {
