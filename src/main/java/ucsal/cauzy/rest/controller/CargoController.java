@@ -63,7 +63,7 @@ public class CargoController implements GenericController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Autor encontrado."),
     })
-    public ResponseEntity<CargoDTO> createCargo(@RequestBody @Valid CargogitDTO cargoDTO) {
+    public ResponseEntity<CargoDTO> createCargo(@RequestBody @Valid CargoDTO cargoDTO) {
         log.info("Cadastrando novo cargo: {}", cargoDTO.nomeCargo());
 
         Cargo cargo = cargoMapper.toEntity(cargoDTO);
@@ -77,7 +77,6 @@ public class CargoController implements GenericController {
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Cargo atualizado com sucesso."),
             @ApiResponse(responseCode = "404", description = "Cargo não encontrado."),
-            @ApiResponse(responseCode = "409", description = "Alguma entidade depende do cargo.")
     })
     public ResponseEntity<Void> updateCargo(@PathVariable Integer id, @RequestBody @Valid CargoDTO cargoDTO) {
         Cargo cargo =  cargoMapper.toEntity(cargoDTO);
@@ -87,15 +86,17 @@ public class CargoController implements GenericController {
         return ResponseEntity.noContent().build();
     }
 
-    // DELETE /api/cargos/{id} - Exclui um cargo
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete ", description = "Deletar um Cargo")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Cargo Deletado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Cargo não encontrado."),
+            @ApiResponse(responseCode = "409", description = "Alguma entidade depende do cargo.")
+    })
     public ResponseEntity<Void> deleteCargo(@PathVariable Integer id) {
-        try {
-            cargoService.delete(id);
-            return ResponseEntity.noContent().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+
+        cargoService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
 

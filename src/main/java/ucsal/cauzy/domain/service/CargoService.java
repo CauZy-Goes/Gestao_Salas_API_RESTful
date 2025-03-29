@@ -42,9 +42,8 @@ public class CargoService {
     }
 
     public void delete(Integer id) {
-        if (!cargoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Cargo", id);
-        }
+        cargoValidator.existsCargo(id);
+        cargoValidator.validateDependencies(id);
         cargoRepository.deleteById(id);
     }
 }
