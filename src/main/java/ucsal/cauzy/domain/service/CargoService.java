@@ -2,8 +2,10 @@ package ucsal.cauzy.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import ucsal.cauzy.domain.entity.Cargo;
 import ucsal.cauzy.domain.repository.CargoRepository;
+import ucsal.cauzy.domain.utils.exceptions.NotFoundException;
 import ucsal.cauzy.domain.utils.exceptions.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.CargoDTO;
 import ucsal.cauzy.rest.mapper.CargoMapper;
@@ -24,10 +26,9 @@ public class CargoService {
         return cargoRepository.findAll();
     }
 
-    public CargoDTO findById(Integer id) {
+    public Cargo findById(Integer id) {
         return cargoRepository.findById(id)
-                .map(cargoMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Cargo", id));
+                .orElseThrow(() -> new NotFoundException("Cargo não encontrado com o id " + id));
     }
 
     public CargoDTO save(CargoDTO cargoDTO) {

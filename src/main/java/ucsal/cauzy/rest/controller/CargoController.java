@@ -45,8 +45,16 @@ public class CargoController implements GenericController {
 
     // GET /api/cargos/{id} - Retorna um cargo por ID
     @GetMapping("/{id}")
+    @Operation(summary = "Obter Por ID", description = "Pesquisar Cargo por ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Autor encontrado."),
+            @ApiResponse(responseCode = "404", description = "Autor não encontrado.")
+    })
     public ResponseEntity<CargoDTO> getCargoById(@PathVariable Integer id) {
-        return ResponseEntity.ok().body(cargoService.findById(id));
+
+        CargoDTO cargoResultado = cargoMapper.toDTO(cargoService.findById(id));
+
+        return ResponseEntity.ok(cargoResultado);
     }
 
     // POST /api/cargos - Cria um novo cargo
