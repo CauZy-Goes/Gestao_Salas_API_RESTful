@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ucsal.cauzy.domain.entity.Cargo;
 import ucsal.cauzy.domain.entity.Usuario;
 import ucsal.cauzy.domain.repository.*;
-import ucsal.cauzy.domain.utils.exceptions.EmailAlreadyExistsException;
-import ucsal.cauzy.domain.utils.exceptions.ResourceNotFoundException;
+import ucsal.cauzy.domain.utils.exception.EmailAlreadyExistsException;
+import ucsal.cauzy.domain.utils.exception.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.UsuarioDTO;
 import ucsal.cauzy.rest.mapper.UsuarioMapper;
 

@@ -5,13 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ucsal.cauzy.domain.entity.EspacoFisico;
 import ucsal.cauzy.domain.entity.TipoSala;
-import ucsal.cauzy.domain.entity.Usuario;
 import ucsal.cauzy.domain.repository.EspacoFisicoRepository;
 import ucsal.cauzy.domain.repository.SolicitacoesRepository;
 import ucsal.cauzy.domain.repository.TipoSalaRepository;
-import ucsal.cauzy.domain.utils.exceptions.DuplicateResourceException;
-import ucsal.cauzy.domain.utils.exceptions.EmailAlreadyExistsException;
-import ucsal.cauzy.domain.utils.exceptions.ResourceNotFoundException;
+import ucsal.cauzy.domain.utils.exception.DuplicateResourceException;
+import ucsal.cauzy.domain.utils.exception.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.EspacoFisicoDTO;
 import ucsal.cauzy.rest.mapper.EspacoFisicoMapper;
 

@@ -1,4 +1,4 @@
-package ucsal.cauzy.rest.exceptions;
+package ucsal.cauzy.rest.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ucsal.cauzy.domain.utils.exceptions.*;
+import ucsal.cauzy.domain.utils.exception.*;
 import ucsal.cauzy.rest.dto.ErroCampo;
 import ucsal.cauzy.rest.dto.ErroResposta;
 

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucsal.cauzy.domain.entity.Status;
 import ucsal.cauzy.domain.repository.StatusRepository;
-import ucsal.cauzy.domain.utils.exceptions.ResourceNotFoundException;
+import ucsal.cauzy.domain.utils.exception.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.StatusDTO;
 import ucsal.cauzy.rest.mapper.StatusMapper;
 

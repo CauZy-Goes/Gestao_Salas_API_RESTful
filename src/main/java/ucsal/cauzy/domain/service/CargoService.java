@@ -2,16 +2,14 @@ package ucsal.cauzy.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 import ucsal.cauzy.domain.entity.Cargo;
 import ucsal.cauzy.domain.repository.CargoRepository;
-import ucsal.cauzy.domain.utils.exceptions.NotFoundException;
-import ucsal.cauzy.domain.utils.exceptions.ResourceNotFoundException;
+import ucsal.cauzy.domain.utils.exception.NotFoundException;
+import ucsal.cauzy.domain.utils.exception.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.CargoDTO;
 import ucsal.cauzy.rest.mapper.CargoMapper;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CargoService {
