@@ -63,7 +63,7 @@ public class CargoController implements GenericController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Autor encontrado."),
     })
-    public ResponseEntity<CargoDTO> createCargo(@RequestBody @Valid CargoDTO cargoDTO) {
+    public ResponseEntity<CargoDTO> createCargo(@RequestBody @Valid CargogitDTO cargoDTO) {
         log.info("Cadastrando novo cargo: {}", cargoDTO.nomeCargo());
 
         Cargo cargo = cargoMapper.toEntity(cargoDTO);
@@ -75,10 +75,16 @@ public class CargoController implements GenericController {
     @PutMapping("/{id}")
     @Operation(summary = "Update ", description = "Update um Cargo")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Autor encontrado."),
+            @ApiResponse(responseCode = "204", description = "Cargo atualizado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Cargo não encontrado."),
+            @ApiResponse(responseCode = "409", description = "Alguma entidade depende do cargo.")
     })
-    public ResponseEntity<CargoDTO> updateCargo(@PathVariable Integer id, @RequestBody @Valid CargoDTO cargoDTO) {
+    public ResponseEntity<Void> updateCargo(@PathVariable Integer id, @RequestBody @Valid CargoDTO cargoDTO) {
+        Cargo cargo =  cargoMapper.toEntity(cargoDTO);
+        cargo.setIdCargo(id);
 
+        cargoService.update(cargo);
+        return ResponseEntity.noContent().build();
     }
 
     // DELETE /api/cargos/{id} - Exclui um cargo

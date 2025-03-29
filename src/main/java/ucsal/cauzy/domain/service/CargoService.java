@@ -37,7 +37,8 @@ public class CargoService {
     }
 
     public Cargo update(Cargo cargo) {
-
+        cargoValidator.existsCargo(cargo.getIdCargo());
+        return cargoRepository.save(cargo);
     }
 
     public void delete(Integer id) {

@@ -39,6 +39,12 @@ public class GlobalExceptionHandler {
         return ErroResposta.notFound(ex.getMessage());
     }
 
+    @ExceptionHandler(ResourceInUseException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroResposta handleResourceInUseException(ResourceInUseException ex) {
+        return ErroResposta.conflito(ex.getMessage());
+    }
+
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<String> handleDuplicateResourceException(DuplicateResourceException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());

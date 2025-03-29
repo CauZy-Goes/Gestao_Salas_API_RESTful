@@ -23,7 +23,7 @@ public class CargoValidator {
     }
 
     public void validateDependencies (Cargo cargo) {
-        if (usuarioRepository.findByCargo(cargo).isEmpty()) {
+        if (usuarioRepository.findByCargo(cargo).isPresent()) {
             throw new ResourceInUseException("Algum usuário depende desse cargo");
         };
     }
