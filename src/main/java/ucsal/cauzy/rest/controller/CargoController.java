@@ -1,9 +1,13 @@
 package ucsal.cauzy.rest.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ucsal.cauzy.domain.service.CargoService;
@@ -23,11 +27,20 @@ public class CargoController implements GenericController {
 
     private final CargoMapper cargoMapper;
 
-    // GET /api/cargos - Lista todos os cargos
     @GetMapping
-    public ResponseEntity<List<CargoDTO>> getAllCargos() {
-        List<CargoDTO> cargos = cargoService.findAll();
-        return ResponseEntity.ok(cargos);
+    @Operation(summary = "Listar", description = "Listar todos os cargos")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sucesso.")
+    })
+    public ResponseEntity<List<CargoDTO>> listar() {
+        log.info("Listando todos os cargos");
+
+        List<CargoDTO> resultado = cargoService.findAll()
+                .stream()
+                .map(cargoMapper::toDTO)
+                .toList();
+
+        return ResponseEntity.ok(resultado);
     }
 
     // GET /api/cargos/{id} - Retorna um cargo por ID

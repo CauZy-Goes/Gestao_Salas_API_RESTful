@@ -20,11 +20,8 @@ public class CargoService {
     @Autowired
     private CargoMapper cargoMapper;
 
-    public List<CargoDTO> findAll() {
-        return cargoRepository.findAll()
-                .stream()
-                .map(cargoMapper::toDTO)
-                .collect(Collectors.toList());
+    public List<Cargo> findAll() {
+        return cargoRepository.findAll();
     }
 
     public CargoDTO findById(Integer id) {
