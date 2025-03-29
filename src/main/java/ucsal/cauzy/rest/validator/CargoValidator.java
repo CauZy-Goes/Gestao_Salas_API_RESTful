@@ -16,9 +16,9 @@ public class CargoValidator {
 
     private final UsuarioRepository usuarioRepository;
 
-    public void existsCargo (Cargo cargo){
-        if(cargoRepository.findById(cargo.getIdCargo()).isEmpty()) {
-            throw new NotFoundException("Cargo não encontrado com o id " + cargo.getIdCargo());
+    public void existsCargo (Integer id){
+        if(cargoRepository.findById(id).isEmpty()) {
+            throw new NotFoundException("Cargo não encontrado com o id " + id);
         }
     }
 

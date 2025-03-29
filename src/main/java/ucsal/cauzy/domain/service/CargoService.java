@@ -1,5 +1,6 @@
 package ucsal.cauzy.domain.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucsal.cauzy.domain.entity.Cargo;
@@ -8,39 +9,35 @@ import ucsal.cauzy.domain.utils.exception.NotFoundException;
 import ucsal.cauzy.domain.utils.exception.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.CargoDTO;
 import ucsal.cauzy.rest.mapper.CargoMapper;
+import ucsal.cauzy.rest.validator.CargoValidator;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CargoService {
 
-    @Autowired
-    private CargoRepository cargoRepository;
+    private final CargoRepository cargoRepository;
 
-    @Autowired
-    private CargoMapper cargoMapper;
+    private final CargoMapper cargoMapper;
+
+    private final CargoValidator cargoValidator;
 
     public List<Cargo> findAll() {
         return cargoRepository.findAll();
     }
 
     public Cargo findById(Integer id) {
-        return cargoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Cargo não encontrado com o id " + id));
+        cargoValidator.existsCargo(id);
+        return cargoRepository.findById(id).get();
     }
 
     public Cargo save(Cargo cargo) {
         return cargoRepository.save(cargo);
     }
 
-    public CargoDTO update(Integer id, CargoDTO cargoDTO) {
-        if (!cargoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Cargo", id);
-        }
-        Cargo cargo = cargoMapper.toEntity(cargoDTO);
-        cargo.setIdCargo(id); // Garante que o ID não seja sobrescrito
-        Cargo updatedCargo = cargoRepository.save(cargo);
-        return cargoMapper.toDTO(updatedCargo);
+    public Cargo update(Cargo cargo) {
+
     }
 
     public void delete(Integer id) {

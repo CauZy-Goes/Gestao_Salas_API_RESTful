@@ -55,7 +55,6 @@ public class CargoController implements GenericController {
     public ResponseEntity<CargoDTO> getCargoById(@PathVariable Integer id) {
 
         CargoDTO cargoResultado = cargoMapper.toDTO(cargoService.findById(id));
-
         return ResponseEntity.ok(cargoResultado);
     }
 
@@ -73,15 +72,13 @@ public class CargoController implements GenericController {
         return ResponseEntity.created(location).build();
     }
 
-    // PUT /api/cargos/{id} - Atualiza um cargo existente
     @PutMapping("/{id}")
-    public ResponseEntity<CargoDTO> updateCargo(@PathVariable Integer id, @RequestBody CargoDTO cargoDTO) {
-        try {
-            CargoDTO updatedCargo = cargoService.update(id, cargoDTO);
-            return ResponseEntity.ok(updatedCargo);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+    @Operation(summary = "Update ", description = "Update um Cargo")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Autor encontrado."),
+    })
+    public ResponseEntity<CargoDTO> updateCargo(@PathVariable Integer id, @RequestBody @Valid CargoDTO cargoDTO) {
+
     }
 
     // DELETE /api/cargos/{id} - Exclui um cargo
