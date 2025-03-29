@@ -10,7 +10,7 @@ public record CargoDTO(
         Integer idCargo,
 
         @NotBlank(message = "campo obrigatorio")
-        @Size(min = 2, max = 100, message = "campo fora do tamanho padrao")
+        @Size(min = 4, max = 100, message = "campo fora do tamanho padrao")
         @Schema(name = "nome do cargo")
         String nomeCargo
         ) {

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucsal.cauzy.domain.entity.TipoSala;
 import ucsal.cauzy.domain.repository.TipoSalaRepository;
-import ucsal.cauzy.domain.utils.exceptions.ResourceNotFoundException;
+import ucsal.cauzy.domain.utils.exception.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.TipoSalaDTO;
 import ucsal.cauzy.rest.mapper.TipoSalaMapper;
 

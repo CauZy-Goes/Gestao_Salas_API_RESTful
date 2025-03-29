@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: gestao_de_espaco_fisico
+  datasource:
+    url: ${DATASOURCE_URL}
+    driver-class-name: org.postgresql.Driver
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        default_schema: gestao_espaco_fisico
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: ${MAIL_SMTP}
+server:
+  port: 8081
+
+logging:
+  level:
+    root: warn
+    org.springframework.web: debug
+    org.springframework.security: trace
+    org.hibernate: error
+    com.example.audit: info
+  file:
+    name: logs/app.log
+    rolling-policy:
+      max-history: 30
+      total-size-cap: 10GB
+  pattern:
+    console: '%clr(%d{dd-MM-yyyy HH:mm:ss}){faint} %clr(%5p) %clr([%t]){faint} %clr(%-40.40logger){cyan} %clr(:){yellow} %m%n'
+  appenders:
+    - type: RollingFile
+      name: FileAppender
+      fileName: logs/application.log
+      filePattern: logs/application-%d{yyyy-MM-dd}.log
+      layout:
+        type: PatternLayout
+        pattern: '%d{yyyy-MM-dd HH:mm:ss} %-5level [%logger{36}] - %msg%n'

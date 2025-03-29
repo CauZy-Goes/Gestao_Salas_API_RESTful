@@ -1,60 +1,102 @@
 package ucsal.cauzy.rest.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ucsal.cauzy.domain.entity.Cargo;
 import ucsal.cauzy.domain.service.CargoService;
 import ucsal.cauzy.rest.dto.CargoDTO;
+import ucsal.cauzy.rest.mapper.CargoMapper;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cargos")
-public class CargoController {
+@RequestMapping("cargos")
+@RequiredArgsConstructor
+@Tag(name = "Autores")
+@Slf4j
+public class CargoController implements GenericController {
 
-    @Autowired
-    private CargoService cargoService;
+    private final CargoService cargoService;
 
-    // GET /api/cargos - Lista todos os cargos
+    private final CargoMapper cargoMapper;
+
     @GetMapping
-    public ResponseEntity<List<CargoDTO>> getAllCargos() {
-        List<CargoDTO> cargos = cargoService.findAll();
-        return ResponseEntity.ok(cargos);
+    @Operation(summary = "Listar", description = "Listar todos os cargos")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sucesso.")
+    })
+    public ResponseEntity<List<CargoDTO>> listar() {
+        log.info("Listando todos os cargos");
+
+        List<CargoDTO> resultado = cargoService.findAll()
+                .stream()
+                .map(cargoMapper::toDTO)
+                .toList();
+
+        return ResponseEntity.ok(resultado);
     }
 
-    // GET /api/cargos/{id} - Retorna um cargo por ID
     @GetMapping("/{id}")
+    @Operation(summary = "Obter Por ID", description = "Pesquisar Cargo por ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Autor encontrado."),
+            @ApiResponse(responseCode = "404", description = "Autor não encontrado.")
+    })
     public ResponseEntity<CargoDTO> getCargoById(@PathVariable Integer id) {
-        return ResponseEntity.ok().body(cargoService.findById(id));
+
+        CargoDTO cargoResultado = cargoMapper.toDTO(cargoService.findById(id));
+        return ResponseEntity.ok(cargoResultado);
     }
 
-    // POST /api/cargos - Cria um novo cargo
     @PostMapping
-    public ResponseEntity<CargoDTO> createCargo(@RequestBody CargoDTO cargoDTO) {
-        CargoDTO createdCargo = cargoService.save(cargoDTO);
-        return ResponseEntity.ok(createdCargo);
+    @Operation(summary = "Criar ", description = "Criar um Cargo")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Autor encontrado."),
+    })
+    public ResponseEntity<CargoDTO> createCargo(@RequestBody @Valid CargoDTO cargoDTO) {
+        log.info("Cadastrando novo cargo: {}", cargoDTO.nomeCargo());
+
+        Cargo cargo = cargoMapper.toEntity(cargoDTO);
+        cargoService.save(cargo);
+        URI location = gerarHeaderLocation(cargo.getIdCargo());
+        return ResponseEntity.created(location).build();
     }
 
-    // PUT /api/cargos/{id} - Atualiza um cargo existente
     @PutMapping("/{id}")
-    public ResponseEntity<CargoDTO> updateCargo(@PathVariable Integer id, @RequestBody CargoDTO cargoDTO) {
-        try {
-            CargoDTO updatedCargo = cargoService.update(id, cargoDTO);
-            return ResponseEntity.ok(updatedCargo);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+    @Operation(summary = "Update ", description = "Update um Cargo")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Cargo atualizado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Cargo não encontrado."),
+    })
+    public ResponseEntity<Void> updateCargo(@PathVariable Integer id, @RequestBody @Valid CargoDTO cargoDTO) {
+        Cargo cargo =  cargoMapper.toEntity(cargoDTO);
+        cargo.setIdCargo(id);
+
+        cargoService.update(cargo);
+        return ResponseEntity.noContent().build();
     }
 
-    // DELETE /api/cargos/{id} - Exclui um cargo
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete ", description = "Deletar um Cargo")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Cargo Deletado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Cargo não encontrado."),
+            @ApiResponse(responseCode = "409", description = "Alguma entidade depende do cargo.")
+    })
     public ResponseEntity<Void> deleteCargo(@PathVariable Integer id) {
-        try {
-            cargoService.delete(id);
-            return ResponseEntity.noContent().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+
+        cargoService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
 

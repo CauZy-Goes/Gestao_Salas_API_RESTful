@@ -9,7 +9,7 @@ import ucsal.cauzy.domain.repository.EspacoFisicoRepository;
 import ucsal.cauzy.domain.repository.SolicitacoesRepository;
 import ucsal.cauzy.domain.repository.StatusRepository;
 import ucsal.cauzy.domain.repository.UsuarioRepository;
-import ucsal.cauzy.domain.utils.exceptions.ResourceNotFoundException;
+import ucsal.cauzy.domain.utils.exception.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.SolicitacoesDTO;
 import ucsal.cauzy.rest.mapper.SolicitacoesMapper;
 

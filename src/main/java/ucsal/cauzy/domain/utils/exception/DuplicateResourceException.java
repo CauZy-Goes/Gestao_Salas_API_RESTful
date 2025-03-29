@@ -1,4 +1,4 @@
-package ucsal.cauzy.domain.utils.exceptions;
+package ucsal.cauzy.domain.utils.exception;
 
 public class DuplicateResourceException extends RuntimeException {
     private static final long serialVersionUID = 1L;

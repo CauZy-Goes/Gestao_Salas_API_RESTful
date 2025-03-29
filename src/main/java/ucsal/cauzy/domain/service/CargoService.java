@@ -1,58 +1,49 @@
 package ucsal.cauzy.domain.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ucsal.cauzy.domain.entity.Cargo;
 import ucsal.cauzy.domain.repository.CargoRepository;
-import ucsal.cauzy.domain.utils.exceptions.ResourceNotFoundException;
+import ucsal.cauzy.domain.utils.exception.NotFoundException;
+import ucsal.cauzy.domain.utils.exception.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.CargoDTO;
 import ucsal.cauzy.rest.mapper.CargoMapper;
+import ucsal.cauzy.rest.validator.CargoValidator;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CargoService {
 
-    @Autowired
-    private CargoRepository cargoRepository;
+    private final CargoRepository cargoRepository;
 
-    @Autowired
-    private CargoMapper cargoMapper;
+    private final CargoMapper cargoMapper;
 
-    public List<CargoDTO> findAll() {
-        return cargoRepository.findAll()
-                .stream()
-                .map(cargoMapper::toDTO)
-                .collect(Collectors.toList());
+    private final CargoValidator cargoValidator;
+
+    public List<Cargo> findAll() {
+        return cargoRepository.findAll();
     }
 
-    public CargoDTO findById(Integer id) {
-        return cargoRepository.findById(id)
-                .map(cargoMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Cargo", id));
+    public Cargo findById(Integer id) {
+        cargoValidator.existsCargo(id);
+        return cargoRepository.findById(id).get();
     }
 
-    public CargoDTO save(CargoDTO cargoDTO) {
-        Cargo cargo = cargoMapper.toEntity(cargoDTO);
-        Cargo savedCargo = cargoRepository.save(cargo);
-        return cargoMapper.toDTO(savedCargo);
+    public Cargo save(Cargo cargo) {
+        return cargoRepository.save(cargo);
     }
 
-    public CargoDTO update(Integer id, CargoDTO cargoDTO) {
-        if (!cargoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Cargo", id);
-        }
-        Cargo cargo = cargoMapper.toEntity(cargoDTO);
-        cargo.setIdCargo(id); // Garante que o ID não seja sobrescrito
-        Cargo updatedCargo = cargoRepository.save(cargo);
-        return cargoMapper.toDTO(updatedCargo);
+    public Cargo update(Cargo cargo) {
+        cargoValidator.existsCargo(cargo.getIdCargo());
+        return cargoRepository.save(cargo);
     }
 
     public void delete(Integer id) {
-        if (!cargoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Cargo", id);
-        }
+        cargoValidator.existsCargo(id);
+        cargoValidator.validateDependencies(id);
         cargoRepository.deleteById(id);
     }
 }
