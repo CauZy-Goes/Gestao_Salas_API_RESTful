@@ -1,5 +1,8 @@
 package ucsal.cauzy.rest.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,11 +13,13 @@ import ucsal.cauzy.rest.dto.UsuarioDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/usuarios")
-public class UsuarioController {
+@RequestMapping("usuarios")
+@RequiredArgsConstructor
+@Tag(name = "Usuarios", description = "Controller de usuários")
+@Slf4j
+public class UsuarioController implements GenericController{
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
     // GET /api/usuarios - Lista todos os usuarios
     @GetMapping

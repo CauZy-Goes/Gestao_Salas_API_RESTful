@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("cargos")
 @RequiredArgsConstructor
-@Tag(name = "Autores")
+@Tag(name = "Cargos", description = "Controller de Cargos")
 @Slf4j
 public class CargoController implements GenericController {
 
