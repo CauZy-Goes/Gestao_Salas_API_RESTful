@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ucsal.cauzy.domain.entity.Cargo;
+import ucsal.cauzy.domain.entity.Solicitacoes;
 import ucsal.cauzy.domain.entity.Usuario;
 import ucsal.cauzy.domain.repository.*;
 import ucsal.cauzy.domain.utils.exception.EmailAlreadyExistsException;
@@ -22,6 +23,8 @@ import java.util.stream.Collectors;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+
+    private final SolicitacoesRepository solicitacoesRepository;
 
     private final UsuarioValidator usuarioValidator;
 
@@ -43,5 +46,14 @@ public class UsuarioService {
         usuarioValidator.existsByIdAndEmail(id, usuario.getEmail());
         usuario.setIdUsuario(id);
         return usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public void delete(Integer id){
+        usuarioValidator.existsUsuario(id);
+        if(!solicitacoesRepository.findByUsuarioId(id).isEmpty()){
+            solicitacoesRepository.deleteByUsuarioId(id);
+        }
+        usuarioRepository.deleteById(id);
     }
 }

@@ -84,5 +84,16 @@ public class UsuarioController implements GenericController{
 
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Deletar", description = "Deletar Usuário")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Usuario Deletado Com Sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        usuarioService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
 
