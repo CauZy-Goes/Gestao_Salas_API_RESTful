@@ -84,7 +84,7 @@ public class EspacoFisicoService {
         espacoFisicoRepository.findByNumero(sala.getNumero())
                 .ifPresent(existingSala -> {
                     if (!existingSala.getIdEspacoFisico().equals(id)) {
-                        throw new DuplicateResourceException("Esse numero da Sala", "numero", Integer.toString(existingSala.getNumero()));
+                        throw new DuplicateResourceException("e");
                     }
                 });
     }
