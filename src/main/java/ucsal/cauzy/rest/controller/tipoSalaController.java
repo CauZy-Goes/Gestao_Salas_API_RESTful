@@ -3,6 +3,7 @@ package ucsal.cauzy.rest.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ucsal.cauzy.domain.entity.TipoSala;
 import ucsal.cauzy.domain.service.TipoSalaService;
 import ucsal.cauzy.rest.dto.TipoSalaDTO;
 
@@ -24,7 +25,7 @@ public class tipoSalaController {
 
     // GET /api/tipoSalas/{id} - Retorna um tipoSala por ID
     @GetMapping("/{id}")
-    public ResponseEntity<TipoSalaDTO> getTipoSalaById(@PathVariable Integer id) {
+    public ResponseEntity<TipoSala> getTipoSalaById(@PathVariable Integer id) {
         return ResponseEntity.ok().body(tipoSalaService.findById(id));
     }
 

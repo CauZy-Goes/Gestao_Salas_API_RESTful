@@ -3,6 +3,7 @@ package ucsal.cauzy.rest.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ucsal.cauzy.domain.entity.Status;
 import ucsal.cauzy.domain.service.StatusService;
 import ucsal.cauzy.rest.dto.StatusDTO;
 
@@ -24,7 +25,7 @@ public class StatusController {
 
     // GET /api/status/{id} - Retorna um status por ID
     @GetMapping("/{id}")
-    public ResponseEntity<StatusDTO> getStatusById(@PathVariable Integer id) {
+    public ResponseEntity<Status> getStatusById(@PathVariable Integer id) {
         return ResponseEntity.ok().body(statusService.findById(id));
     }
 
