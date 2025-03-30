@@ -70,5 +70,7 @@ public class UsuarioController implements GenericController{
 
         return ResponseEntity.status(201).body(usuarioPesquisaDTO);
     }
+
+
 }
 

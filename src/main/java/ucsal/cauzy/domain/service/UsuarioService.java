@@ -38,4 +38,9 @@ public class UsuarioService {
         usuarioValidator.existsEmail(usuario.getEmail());
         return usuarioRepository.save(usuario);
     }
+
+    public Usuario update(Usuario usuario, Integer id){
+        usuarioValidator.existsByIdAndEmail(id, usuario.getEmail());
+        return usuarioRepository.save(usuario);
+    }
 }

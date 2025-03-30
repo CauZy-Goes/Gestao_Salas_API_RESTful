@@ -24,4 +24,15 @@ public class UsuarioValidator {
                 throw new EmailAlreadyExistsException();
         }
     }
+
+    public void existsByIdAndEmail(Integer id, String email){
+        existsUsuario(id);
+
+        Usuario usuario = usuarioRepository.findById(id).get();
+        if(usuario.getEmail().equals(email)){
+           return;
+        }
+
+        existsEmail(email);
+    }
 }
