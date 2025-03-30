@@ -29,8 +29,13 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public Optional<Usuario> findById(Integer id){
+    public Usuario findById(Integer id){
         usuarioValidator.existsUsuario(id);
-        return usuarioRepository.findById(id);
+        return usuarioRepository.findById(id).get();
+    }
+
+    public Usuario save(Usuario usuario){
+        usuarioValidator.existsEmail(usuario.getEmail());
+        return usuarioRepository.save(usuario);
     }
 }

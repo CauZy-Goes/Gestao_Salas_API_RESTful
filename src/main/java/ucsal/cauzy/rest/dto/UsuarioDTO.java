@@ -12,7 +12,7 @@ public record UsuarioDTO(
         Integer idUsuario,
 
         @NotBlank(message = "Campo obrigatório")
-        @Size(min = 2, max = 50, message = "Fora Do Tamanho Padrao")
+        @Size(min = 3, max = 50, message = "Fora Do Tamanho Padrao")
         @Schema(description = "Nome completo do usuário")
         String nomeUsuario,
 

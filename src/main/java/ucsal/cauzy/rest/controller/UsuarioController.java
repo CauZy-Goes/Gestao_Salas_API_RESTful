@@ -4,12 +4,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.HandlerMapping;
+import ucsal.cauzy.domain.entity.Usuario;
 import ucsal.cauzy.domain.service.CargoService;
 import ucsal.cauzy.domain.service.UsuarioService;
 import ucsal.cauzy.rest.dto.UsuarioDTO;
@@ -51,9 +53,22 @@ public class UsuarioController implements GenericController{
             @ApiResponse(responseCode = "404", description = "O Usuario não foi encontrado"),
     })
     public ResponseEntity<UsuarioPesquisaDTO> findById(@PathVariable Integer id) {
-        UsuarioPesquisaDTO usuario = usuarioService.findById(id).map(usuarioMapper::toDTO).get();
+        UsuarioPesquisaDTO usuario = usuarioMapper.toDTO(usuarioService.findById(id));
 
         return ResponseEntity.ok(usuario);
+    }
+
+    @PostMapping
+    @Operation(summary = "Salvar", description = "Salvar Usuario")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Usuario Salvo com Sucesso"),
+            @ApiResponse(responseCode = "409", description = "Esse email já foi cadastrado")
+    })
+    public ResponseEntity<UsuarioPesquisaDTO> save(@RequestBody @Valid UsuarioDTO usuarioDTO) {
+        Usuario usuario = usuarioService.save(usuarioMapper.toEntity(usuarioDTO));
+        UsuarioPesquisaDTO usuarioPesquisaDTO = usuarioMapper.toDTO(usuario);
+
+        return ResponseEntity.status(201).body(usuarioPesquisaDTO);
     }
 }
 
