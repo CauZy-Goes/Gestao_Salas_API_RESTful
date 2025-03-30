@@ -71,6 +71,17 @@ public class UsuarioController implements GenericController{
         return ResponseEntity.status(201).body(usuarioPesquisaDTO);
     }
 
+    @PutMapping("/{id}")
+    @Operation(summary = "Update", description = "Modificificar Usuário")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Usuário Modificado Com Sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário Não encontrado"),
+            @ApiResponse(responseCode = "409", description = "O email que foi modificado esta em uso"),
+    })
+    public ResponseEntity<Void> update(@RequestBody @Valid UsuarioDTO usuarioDTO, @PathVariable Integer id){
+        usuarioService.update(usuarioMapper.toEntity(usuarioDTO) , id);
 
+        return ResponseEntity.noContent().build();
+    }
 }
 

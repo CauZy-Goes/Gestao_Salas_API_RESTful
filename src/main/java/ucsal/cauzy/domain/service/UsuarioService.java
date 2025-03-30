@@ -41,6 +41,7 @@ public class UsuarioService {
 
     public Usuario update(Usuario usuario, Integer id){
         usuarioValidator.existsByIdAndEmail(id, usuario.getEmail());
+        usuario.setIdUsuario(id);
         return usuarioRepository.save(usuario);
     }
 }
