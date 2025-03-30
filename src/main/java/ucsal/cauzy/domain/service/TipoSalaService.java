@@ -17,6 +17,7 @@ public class TipoSalaService {
     @Autowired
     private TipoSalaRepository tipoSalaRepository;
 
+
     @Autowired
     private TipoSalaMapper tipoSalaMapper;
 
@@ -27,10 +28,8 @@ public class TipoSalaService {
                 .collect(Collectors.toList());
     }
 
-    public TipoSalaDTO findById(Integer id) {
-        return tipoSalaRepository.findById(id)
-                .map(tipoSalaMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Tipo de Sala", id));
+    public TipoSala findById(Integer id) {
+        return tipoSalaRepository.findById(id).get();
     }
 
     public TipoSalaDTO save(TipoSalaDTO tipoSalaDTO) {
