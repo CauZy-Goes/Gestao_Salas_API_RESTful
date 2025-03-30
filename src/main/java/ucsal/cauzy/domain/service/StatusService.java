@@ -27,10 +27,8 @@ public class StatusService {
                 .collect(Collectors.toList());
     }
 
-    public StatusDTO findById(Integer id) {
-        return statusRepository.findById(id)
-                .map(statusMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Status", id));
+    public Status findById(Integer id) {
+        return statusRepository.findById(id).orElse(null);
     }
 
     public StatusDTO save(StatusDTO statusDTO) {

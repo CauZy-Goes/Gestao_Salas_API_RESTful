@@ -38,29 +38,21 @@ public class SolicitacoesService {
     private EmailService emailService;
 
     public List<SolicitacoesDTO> findAll() {
-        return solicitacoesRepository.findAll()
-                .stream()
-                .map(solicitacoesMapper::toDTO)
-                .collect(Collectors.toList());
+        return null;
     }
 
-    public SolicitacoesDTO findById(Integer id) {
-        return solicitacoesRepository.findById(id)
-                .map(solicitacoesMapper::toDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Solicitação", id));
+    public Solicitacoes findById(Integer id) {
+        return solicitacoesRepository.findById(id).get();
     }
 
     public List<SolicitacoesDTO> findByUsuarioSolicitanteId(Integer id) {
-        return solicitacoesRepository.findByUsuarioSolicitante_IdUsuario(id)
-                .stream()
-                .map(solicitacoesMapper::toDTO)
-                .collect(Collectors.toList());
+        return null;
     }
 
     public SolicitacoesDTO save(SolicitacoesDTO solicitacoesDTO) {
         Solicitacoes solicitacoes = tratarSolicitacoes(solicitacoesDTO);
         Solicitacoes savedSolicitacoes = solicitacoesRepository.save(solicitacoes);
-        return solicitacoesMapper.toDTO(savedSolicitacoes);
+        return null;
     }
 
     private Solicitacoes tratarSolicitacoes(SolicitacoesDTO solicitacoesDTO) {
@@ -87,7 +79,7 @@ public class SolicitacoesService {
 
         emailService.enviarNotificacaoAlteracao(updatedSolicitacoes);
 
-        return solicitacoesMapper.toDTO(updatedSolicitacoes);
+        return  null;
     }
 
     public void delete(Integer id) {

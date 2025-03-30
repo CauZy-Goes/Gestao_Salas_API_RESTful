@@ -3,6 +3,7 @@ package ucsal.cauzy.rest.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ucsal.cauzy.domain.entity.Solicitacoes;
 import ucsal.cauzy.domain.service.SolicitacoesService;
 import ucsal.cauzy.rest.dto.SolicitacoesDTO;
 
@@ -30,7 +31,7 @@ public class SolicitacoesController {
 
     // GET /api/solicitacoes/{id} - Retorna um solicitacoes por ID
     @GetMapping("/{id}")
-    public ResponseEntity<SolicitacoesDTO> getSolicitacoesById(@PathVariable Integer id) {
+    public ResponseEntity<Solicitacoes> getSolicitacoesById(@PathVariable Integer id) {
         return ResponseEntity.ok().body(solicitacoesService.findById(id));
     }
 
