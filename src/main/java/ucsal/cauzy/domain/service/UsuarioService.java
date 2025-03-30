@@ -11,6 +11,7 @@ import ucsal.cauzy.domain.utils.exception.EmailAlreadyExistsException;
 import ucsal.cauzy.domain.utils.exception.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.UsuarioDTO;
 import ucsal.cauzy.rest.mapper.UsuarioMapper;
+import ucsal.cauzy.rest.validator.UsuarioValidator;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +23,14 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
 
+    private final UsuarioValidator usuarioValidator;
 
     public List<Usuario> findAll(){
         return usuarioRepository.findAll();
+    }
+
+    public Optional<Usuario> findById(Integer id){
+        usuarioValidator.existsUsuario(id);
+        return usuarioRepository.findById(id);
     }
 }
