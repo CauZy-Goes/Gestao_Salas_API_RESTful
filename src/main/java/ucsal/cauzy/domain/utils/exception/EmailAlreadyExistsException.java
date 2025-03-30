@@ -4,6 +4,6 @@ public class EmailAlreadyExistsException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public EmailAlreadyExistsException() {
-        super("The e-mail you are trying to register already exists");
+        super("O email que você esta tentando registrar já existe");
     }
 }
