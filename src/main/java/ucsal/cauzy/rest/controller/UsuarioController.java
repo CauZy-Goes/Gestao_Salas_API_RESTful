@@ -18,6 +18,7 @@ import ucsal.cauzy.rest.dto.UsuarioDTO;
 import ucsal.cauzy.rest.dto.UsuarioPesquisaDTO;
 import ucsal.cauzy.rest.mapper.UsuarioMapper;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -64,11 +65,11 @@ public class UsuarioController implements GenericController{
             @ApiResponse(responseCode = "201", description = "Usuario Salvo com Sucesso"),
             @ApiResponse(responseCode = "409", description = "Esse email já foi cadastrado")
     })
-    public ResponseEntity<UsuarioPesquisaDTO> save(@RequestBody @Valid UsuarioDTO usuarioDTO) {
+    public ResponseEntity<Void> save(@RequestBody @Valid UsuarioDTO usuarioDTO) {
         Usuario usuario = usuarioService.save(usuarioMapper.toEntity(usuarioDTO));
-        UsuarioPesquisaDTO usuarioPesquisaDTO = usuarioMapper.toDTO(usuario);
 
-        return ResponseEntity.status(201).body(usuarioPesquisaDTO);
+        URI location = gerarHeaderLocation(usuario.getIdUsuario());
+        return ResponseEntity.created(location).build();
     }
 
     @PutMapping("/{id}")

@@ -63,7 +63,7 @@ public class CargoController implements GenericController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Autor encontrado."),
     })
-    public ResponseEntity<CargoDTO> createCargo(@RequestBody @Valid CargoDTO cargoDTO) {
+    public ResponseEntity<Void> createCargo(@RequestBody @Valid CargoDTO cargoDTO) {
         log.info("Cadastrando novo cargo: {}", cargoDTO.nomeCargo());
 
         Cargo cargo = cargoMapper.toEntity(cargoDTO);
