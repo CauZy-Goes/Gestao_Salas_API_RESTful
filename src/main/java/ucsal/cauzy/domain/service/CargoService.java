@@ -37,8 +37,9 @@ public class CargoService {
         return cargoRepository.save(cargo);
     }
 
-    public Cargo update(Cargo cargo) {
-        cargoValidator.existsCargo(cargo.getIdCargo());
+    public Cargo update(Cargo cargo, Integer idCargo) {
+        cargoValidator.existsCargo(idCargo);
+        cargo.setIdCargo(idCargo);
         return cargoRepository.save(cargo);
     }
 

@@ -79,10 +79,8 @@ public class CargoController implements GenericController {
             @ApiResponse(responseCode = "404", description = "Cargo não encontrado."),
     })
     public ResponseEntity<Void> updateCargo(@PathVariable Integer id, @RequestBody @Valid CargoDTO cargoDTO) {
-        Cargo cargo =  cargoMapper.toEntity(cargoDTO);
-        cargo.setIdCargo(id);
+        cargoService.update(cargoMapper.toEntity(cargoDTO), id);
 
-        cargoService.update(cargo);
         return ResponseEntity.noContent().build();
     }
 
