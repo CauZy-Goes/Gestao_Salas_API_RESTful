@@ -1,5 +1,8 @@
 package ucsal.cauzy.rest.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +24,14 @@ public class UsuarioController implements GenericController{
 
     private final UsuarioService usuarioService;
 
-    // GET /api/usuarios - Lista todos os usuarios
     @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> getAllUsuarios() {
-        List<UsuarioDTO> usuarios = usuarioService.findAll();
-        return ResponseEntity.ok(usuarios);
-    }
+    @Operation(summary = "Buscar Todos", description = "Busca todos os usuarios")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Busca efetuada com sucesso")
+    })
+    public ResponseEntity<List<UsuarioDTO>> findAll() {
 
+    }
     // GET /api/usuarios/{id} - Retorna um usuario por ID
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> getUsuarioById(@PathVariable Integer id) {
