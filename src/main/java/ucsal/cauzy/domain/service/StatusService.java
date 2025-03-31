@@ -34,8 +34,10 @@ public class StatusService {
         return statusRepository.save(status);
     }
 
-    public StatusDTO update(Integer id, StatusDTO statusDTO) {
-        return null;
+    public Status update(Integer id, Status status) {
+        statusValidator.existsStatus(id);
+        status.setIdStatus(id);
+        return statusRepository.save(status);
     }
 
     public void delete(Integer id) {

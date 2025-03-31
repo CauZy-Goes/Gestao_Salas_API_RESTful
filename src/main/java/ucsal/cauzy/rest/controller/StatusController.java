@@ -59,22 +59,23 @@ public class StatusController implements GenericController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Status Criado Com Sucesso")
     })
-    public ResponseEntity<StatusDTO> save(@RequestBody StatusDTO statusDTO){
+    public ResponseEntity<Void> save(@RequestBody StatusDTO statusDTO){
         Status status = statusMapper.toEntity(statusDTO);
         statusService.save(status);
         URI uri =  gerarHeaderLocation(status.getIdStatus());
         return ResponseEntity.created(uri).build();
     }
 
-    // PUT /api/status/{id} - Atualiza um status existente
     @PutMapping("/{id}")
-    public ResponseEntity<StatusDTO> updateStatus(@PathVariable Integer id, @RequestBody StatusDTO statusDTO) {
-        try {
-            StatusDTO updatedStatus = statusService.update(id, statusDTO);
-            return ResponseEntity.ok(updatedStatus);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+    @Operation(summary = "Alterar", description = "Alterar Status")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Status Alterado Com Sucesso"),
+            @ApiResponse(responseCode = "404", description = "Status não encotrado")
+    })
+    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody StatusDTO statusDTO){
+        Status status = statusMapper.toEntity(statusDTO);
+        statusService.update(id, status);
+        return ResponseEntity.noContent().build();
     }
 
     // DELETE /api/status/{id} - Exclui um status
