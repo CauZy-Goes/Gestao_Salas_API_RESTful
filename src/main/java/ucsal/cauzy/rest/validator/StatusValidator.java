@@ -26,7 +26,7 @@ public class StatusValidator {
         existsStatus(id);
         Status status = statusRepository.findById(id).get();
 
-        if(solicitacoesRepository.findByStatus(status).isPresent()){
+        if(!solicitacoesRepository.findByStatus(status).isEmpty()){
             throw new ResourceInUseException("Alguma solicitacao depende desse status");
         }
     }

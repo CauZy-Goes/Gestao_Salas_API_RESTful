@@ -41,9 +41,8 @@ public class StatusService {
     }
 
     public void delete(Integer id) {
-        if (!statusRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Status", id);
-        }
+        statusValidator.existsStatus(id);
+        statusValidator.validateDependencies(id);
         statusRepository.deleteById(id);
     }
 }

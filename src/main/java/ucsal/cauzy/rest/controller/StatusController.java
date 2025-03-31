@@ -78,15 +78,15 @@ public class StatusController implements GenericController {
         return ResponseEntity.noContent().build();
     }
 
-    // DELETE /api/status/{id} - Exclui um status
     @DeleteMapping("/{id}")
+    @Operation(summary = "Deletar", description = "Deletar Status")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Status Deletado Com Sucesso"),
+            @ApiResponse(responseCode = "404", description = "Status não encotrado")
+    })
     public ResponseEntity<Void> deleteStatus(@PathVariable Integer id) {
-        try {
-            statusService.delete(id);
-            return ResponseEntity.noContent().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+        statusService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
 
