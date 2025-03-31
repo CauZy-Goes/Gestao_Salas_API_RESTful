@@ -1,61 +1,95 @@
 package ucsal.cauzy.rest.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ucsal.cauzy.domain.entity.TipoSala;
 import ucsal.cauzy.domain.service.TipoSalaService;
 import ucsal.cauzy.rest.dto.TipoSalaDTO;
+import ucsal.cauzy.rest.mapper.TipoSalaMapper;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/tipoSalas")
-public class tipoSalaController {
+@RequestMapping("tipoSala")
+@RequiredArgsConstructor
+@Tag(name="TipoSala")
+@Slf4j
+public class tipoSalaController implements GenericController {
 
-    @Autowired
-    private TipoSalaService tipoSalaService;
+    private final TipoSalaService tipoSalaService;
 
-    // GET /api/tipoSalas - Lista todos os tipoSalas
+    private final TipoSalaMapper tipoSalaMapper;
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Buscar Pelo Id", description = "Busca O Tipo De Sala Pelo ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sucesso na busca"),
+            @ApiResponse(responseCode = "404", description = "Tipo De Sala Não foi encontrado")
+    })
+    public ResponseEntity<TipoSalaDTO> findById(@PathVariable Integer id) {
+        TipoSala tipoSala = tipoSalaService.findById(id);
+        return ResponseEntity.ok(tipoSalaMapper.toDTO(tipoSala));
+    }
+
     @GetMapping
-    public ResponseEntity<List<TipoSalaDTO>> getAllTipoSalas() {
-        List<TipoSalaDTO> tipoSalas = tipoSalaService.findAll();
+    @Operation(summary = "Buscar Todos", description = "Buscar Todos Os Tipos De Salas")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sucesso Na Busca")
+    })
+    public ResponseEntity<List<TipoSalaDTO>> findAll() {
+        List<TipoSalaDTO> tipoSalas = tipoSalaService.findAll()
+                .stream()
+                .map(tipoSalaMapper::toDTO)
+                .toList();
+
         return ResponseEntity.ok(tipoSalas);
     }
 
-    // GET /api/tipoSalas/{id} - Retorna um tipoSala por ID
-    @GetMapping("/{id}")
-    public ResponseEntity<TipoSala> getTipoSalaById(@PathVariable Integer id) {
-        return ResponseEntity.ok().body(tipoSalaService.findById(id));
-    }
-
-    // POST /api/tipoSalas - Cria um novo tipoSala
     @PostMapping
-    public ResponseEntity<TipoSalaDTO> createTipoSala(@RequestBody TipoSalaDTO tipoSalaDTO) {
-        TipoSalaDTO createdTipoSala = tipoSalaService.save(tipoSalaDTO);
-        return ResponseEntity.ok(createdTipoSala);
+    @Operation(summary = "Salvar", description = "Salvar um novo Tipo De Sala")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Tipo Sala Criado Com Sucesso")
+    })
+    public ResponseEntity<Void> save(@RequestBody @Valid TipoSalaDTO tipoSalaDto) {
+        TipoSala tipoSala = tipoSalaMapper.toEntity(tipoSalaDto);
+        tipoSalaService.save(tipoSala);
+        URI uri = gerarHeaderLocation(tipoSala.getIdTipoSala());
+        return ResponseEntity.created(uri).build();
     }
 
-    // PUT /api/tipoSalas/{id} - Atualiza um tipoSala existente
     @PutMapping("/{id}")
-    public ResponseEntity<TipoSalaDTO> updateTipoSala(@PathVariable Integer id, @RequestBody TipoSalaDTO tipoSalaDTO) {
-        try {
-            TipoSalaDTO updatedTipoSala = tipoSalaService.update(id, tipoSalaDTO);
-            return ResponseEntity.ok(updatedTipoSala);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+    @Operation(summary = "Modificar", description = "Modificar Tipo De Sala")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Tipo Sala Modificado Com Sucesso"),
+            @ApiResponse(responseCode = "404", description = "Tipo Sala Não Encontrado"),
+    })
+    public ResponseEntity<Void> update(@RequestBody @Valid TipoSalaDTO tipoSalaDto, @PathVariable Integer id) {
+        TipoSala tipoSala = tipoSalaMapper.toEntity(tipoSalaDto);
+        tipoSalaService.update(tipoSala, id);
+
+        return ResponseEntity.noContent().build();
     }
 
-    // DELETE /api/tipoSalas/{id} - Exclui um tipoSala
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTipoSala(@PathVariable Integer id) {
-        try {
-            tipoSalaService.delete(id);
-            return ResponseEntity.noContent().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+    @Operation(summary = "Modificar", description = "Modificar Tipo De Sala")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Tipo Sala Deletado Com Sucesso"),
+            @ApiResponse(responseCode = "404", description = "Tipo Sala Não Encontrado"),
+            @ApiResponse(responseCode = "409", description = "Alguma Entidade Depende Desse Tipo Sala")
+    })
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        tipoSalaService.delete(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
 

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +47,8 @@ public class StatusController implements GenericController {
     @GetMapping("/{id}")
     @Operation(summary = "Buscar pelo ID", description = "Buscar status pelo ID")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Cargo encontrado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Cargo não encontrado")
+            @ApiResponse(responseCode = "200", description = "Status encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Status não encontrado")
     })
     public ResponseEntity<StatusDTO> findById(@PathVariable Integer id){
         StatusDTO statusDTO = statusMapper.toDTO(statusService.findById(id));
@@ -59,7 +60,7 @@ public class StatusController implements GenericController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Status Criado Com Sucesso")
     })
-    public ResponseEntity<Void> save(@RequestBody StatusDTO statusDTO){
+    public ResponseEntity<Void> save(@RequestBody @Valid StatusDTO statusDTO){
         Status status = statusMapper.toEntity(statusDTO);
         statusService.save(status);
         URI uri =  gerarHeaderLocation(status.getIdStatus());
