@@ -38,5 +38,19 @@ public class tipoSalaController implements GenericController{
         return ResponseEntity.ok(tipoSalaMapper.toDTO(tipoSala));
     }
 
+    @GetMapping
+    @Operation(summary = "Buscar Todos", description = "Buscar Todos Os Tipos De Salas")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sucesso Na Busca")
+    })
+    public ResponseEntity<List<TipoSalaDTO>> findAll(){
+        List<TipoSalaDTO> tipoSalas = tipoSalaService.findAll()
+                .stream()
+                .map(tipoSalaMapper::toDTO)
+                .toList();
+
+        return ResponseEntity.ok(tipoSalas);
+    }
+
 }
 
