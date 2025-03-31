@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import ucsal.cauzy.domain.service.EspacoFisicoService;
 import ucsal.cauzy.rest.dto.EspacoFisicoDTO;
 import ucsal.cauzy.rest.dto.EspacoFisicoPesquisaDTO;
 import ucsal.cauzy.rest.dto.StatusDTO;
+import ucsal.cauzy.rest.dto.EspacoFisicoDTO;
 import ucsal.cauzy.rest.mapper.EspacoFisicoMapper;
 
 import java.net.URI;
@@ -62,11 +64,24 @@ public class EspacoFisicoController implements GenericController{
             @ApiResponse(responseCode = "201", description = "Espaco Físico Criado Com Sucesso"),
             @ApiResponse(responseCode = "409", description = "Esse número de espaco Fisico Já foi cadastrado")
     })
-    public ResponseEntity<Void> save(@RequestBody EspacoFisicoDTO espacoFisicoDTO){
+    public ResponseEntity<Void> save(@RequestBody @Valid EspacoFisicoDTO espacoFisicoDTO){
          EspacoFisico espacoFisico = espacoFisicoMapper.toEntity(espacoFisicoDTO);
         espacoFisicoService.save(espacoFisico);
         URI uri =  gerarHeaderLocation(espacoFisico.getIdEspacoFisico());
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Update", description = "Modificar Espaco Físico")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Espaco Físico Modificado Com Sucesso"),
+            @ApiResponse(responseCode = "404", description = "Espaco Físico Não encontrado"),
+            @ApiResponse(responseCode = "409", description = "O nuemero que foi modificado esta em uso"),
+    })
+    public ResponseEntity<Void> update(@RequestBody @Valid EspacoFisicoDTO espacoFisicoDTO, @PathVariable Integer id){
+        espacoFisicoService.update(espacoFisicoMapper.toEntity(espacoFisicoDTO) , id);
+
+        return ResponseEntity.noContent().build();
     }
 }
 
