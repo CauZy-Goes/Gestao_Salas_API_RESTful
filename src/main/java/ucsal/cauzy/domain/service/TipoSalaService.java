@@ -21,4 +21,28 @@ public class TipoSalaService {
 
     private final TipoSalaValidador tipoSalaValidador;
 
+    public TipoSala findById(Integer id) {
+        tipoSalaValidador.existsTipoSala(id);
+        return tipoSalaRepository.findById(id).get();
+    }
+
+    public List<TipoSala> findAll() {
+        return tipoSalaRepository.findAll();
+    }
+
+    public TipoSala save(TipoSala tipoSala) {
+        return tipoSalaRepository.save(tipoSala);
+    }
+
+    public TipoSala update(TipoSala tipoSala, Integer id){
+        tipoSalaValidador.existsTipoSala(id);
+        tipoSalaValidador.validateDependencies(id);
+        return tipoSalaRepository.save(tipoSala);
+    }
+
+    public void delete(Integer id) {
+        tipoSalaValidador.existsTipoSala(id);
+        tipoSalaValidador.validateDependencies(id);
+        tipoSalaRepository.deleteById(id);
+    }
 }
