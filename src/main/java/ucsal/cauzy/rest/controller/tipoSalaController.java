@@ -1,5 +1,8 @@
 package ucsal.cauzy.rest.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +26,17 @@ public class tipoSalaController implements GenericController{
     private final TipoSalaService tipoSalaService;
 
     private final TipoSalaMapper tipoSalaMapper;
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Buscar Pelo Id", description = "Busca O Tipo De Sala Pelo ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sucesso na busca"),
+            @ApiResponse(responseCode = "404", description = "Tipo De Sala Não foi encontrado")
+    })
+    public ResponseEntity<TipoSalaDTO> findById(@PathVariable Integer id){
+        TipoSala tipoSala = tipoSalaService.findById(id);
+        return ResponseEntity.ok(tipoSalaMapper.toDTO(tipoSala));
+    }
 
 }
 

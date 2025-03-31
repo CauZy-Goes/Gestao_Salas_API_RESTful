@@ -26,7 +26,7 @@ public class TipoSalaValidador {
         existsTipoSala(id);
         TipoSala tipoSala = tipoSalaRepository.findById(id).get();
 
-        if(espacoFisicoRepository.findByTipoSala(tipoSala).isPresent()){
+        if(!espacoFisicoRepository.findByTipoSala(tipoSala).isEmpty()){
             throw new ResourceInUseException("Algum espaco fisico depende desse tipo sala");
         }
     }
