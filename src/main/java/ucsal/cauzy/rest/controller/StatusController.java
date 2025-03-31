@@ -28,7 +28,7 @@ public class StatusController {
     private final StatusMapper statusMapper;
 
     @GetMapping
-    @Operation(summary = "Listar todos", description = "Listas todos os status")
+    @Operation(summary = "Buscar todos", description = "Buscar todos os status")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Cargos Listados com Sucesso")
     })
@@ -41,10 +41,15 @@ public class StatusController {
         return ResponseEntity.ok(listaStatus);
     }
 
-    // GET /api/status/{id} - Retorna um status por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Status> getStatusById(@PathVariable Integer id) {
-        return ResponseEntity.ok().body(statusService.findById(id));
+    @Operation(summary = "Buscar pelo ID", description = "Buscar status pelo ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Cargo encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Cargo não encontrado")
+    })
+    public ResponseEntity<StatusDTO> findById(@PathVariable Integer id){
+        StatusDTO statusDTO = statusMapper.toDTO(statusService.findById(id));
+        return ResponseEntity.ok(statusDTO);
     }
 
     // POST /api/status - Cria um novo status
