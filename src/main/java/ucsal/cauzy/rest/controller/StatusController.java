@@ -1,26 +1,44 @@
 package ucsal.cauzy.rest.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ucsal.cauzy.domain.entity.Status;
 import ucsal.cauzy.domain.service.StatusService;
 import ucsal.cauzy.rest.dto.StatusDTO;
+import ucsal.cauzy.rest.mapper.StatusMapper;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/status")
+@RequestMapping("status")
+@RequiredArgsConstructor
+@Tag(name = "Status")
+@Slf4j
 public class StatusController {
 
-    @Autowired
-    private StatusService statusService;
+    private final StatusService statusService;
 
-    // GET /api/status - Lista todos os status
+    private final StatusMapper statusMapper;
+
     @GetMapping
-    public ResponseEntity<List<StatusDTO>> getAllStatus() {
-        List<StatusDTO> status = statusService.findAll();
-        return ResponseEntity.ok(status);
+    @Operation(summary = "Listar todos", description = "Listas todos os status")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Cargos Listados com Sucesso")
+    })
+    public ResponseEntity<List<StatusDTO>> findAll() {
+        List<StatusDTO> listaStatus = statusService.findAll()
+                .stream()
+                .map(statusMapper::toDTO)
+                .toList();
+
+        return ResponseEntity.ok(listaStatus);
     }
 
     // GET /api/status/{id} - Retorna um status por ID

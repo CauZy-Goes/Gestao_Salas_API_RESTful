@@ -20,11 +20,8 @@ public class StatusService {
     @Autowired
     private StatusMapper statusMapper;
 
-    public List<StatusDTO> findAll() {
-        return statusRepository.findAll()
-                .stream()
-                .map(statusMapper::toDTO)
-                .collect(Collectors.toList());
+    public List<Status> findAll() {
+        return statusRepository.findAll();
     }
 
     public Status findById(Integer id) {
