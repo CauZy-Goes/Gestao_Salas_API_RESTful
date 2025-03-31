@@ -10,7 +10,7 @@ import ucsal.cauzy.rest.validator.EspacoFisicoValidator;
 @RequiredArgsConstructor
 public class EspacoFisicoService {
 
-    protected final EspacoFisicoValidator espacoFisicoValidator;
+    private final EspacoFisicoValidator espacoFisicoValidator;
 
     private final EspacoFisicoRepository espacoFisicoRepository;
 
