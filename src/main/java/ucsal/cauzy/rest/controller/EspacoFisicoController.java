@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ucsal.cauzy.domain.entity.EspacoFisico;
+import ucsal.cauzy.domain.entity.Status;
 import ucsal.cauzy.domain.service.EspacoFisicoService;
 import ucsal.cauzy.rest.dto.EspacoFisicoDTO;
 import ucsal.cauzy.rest.dto.EspacoFisicoPesquisaDTO;
 import ucsal.cauzy.rest.dto.StatusDTO;
 import ucsal.cauzy.rest.mapper.EspacoFisicoMapper;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -52,6 +54,19 @@ public class EspacoFisicoController implements GenericController{
     public ResponseEntity<EspacoFisicoPesquisaDTO> findById(@PathVariable Integer id){
         EspacoFisicoPesquisaDTO espacoFisicoPesquisaDTO = espacoFisicoMapper.toDTO(espacoFisicoService.findById(id));
         return ResponseEntity.ok(espacoFisicoPesquisaDTO);
+    }
+
+    @PostMapping
+    @Operation(summary = "Salvar", description = "Salvar Espaco Físico")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Espaco Físico Criado Com Sucesso"),
+            @ApiResponse(responseCode = "409", description = "Esse número de espaco Fisico Já foi cadastrado")
+    })
+    public ResponseEntity<Void> save(@RequestBody EspacoFisicoDTO espacoFisicoDTO){
+         EspacoFisico espacoFisico = espacoFisicoMapper.toEntity(espacoFisicoDTO);
+        espacoFisicoService.save(espacoFisico);
+        URI uri =  gerarHeaderLocation(espacoFisico.getIdEspacoFisico());
+        return ResponseEntity.created(uri).build();
     }
 }
 

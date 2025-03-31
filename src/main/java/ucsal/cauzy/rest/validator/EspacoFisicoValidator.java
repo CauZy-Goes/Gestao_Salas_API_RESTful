@@ -22,7 +22,7 @@ public class EspacoFisicoValidator {
 
     public void existsNumero(Integer numero){
         if(espacoFisicoRepository.findByNumero(numero).isPresent()){
-            throw new DuplicateResourceException("Espaco Fisico não encotrando com o numero : " + numero);
+            throw new DuplicateResourceException("Já existe um Espaco Fisico com o número: " + numero);
         }
     }
 
