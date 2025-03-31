@@ -9,11 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.AbstractController;
 import ucsal.cauzy.domain.entity.Status;
 import ucsal.cauzy.domain.service.StatusService;
 import ucsal.cauzy.rest.dto.StatusDTO;
 import ucsal.cauzy.rest.mapper.StatusMapper;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -21,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Status")
 @Slf4j
-public class StatusController {
+public class StatusController implements GenericController {
 
     private final StatusService statusService;
 
@@ -52,11 +54,16 @@ public class StatusController {
         return ResponseEntity.ok(statusDTO);
     }
 
-    // POST /api/status - Cria um novo status
     @PostMapping
-    public ResponseEntity<StatusDTO> createStatus(@RequestBody StatusDTO statusDTO) {
-        StatusDTO createdStatus = statusService.save(statusDTO);
-        return ResponseEntity.ok(createdStatus);
+    @Operation(summary = "Salvar", description = "Salvar Status")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Status Criado Com Sucesso")
+    })
+    public ResponseEntity<StatusDTO> save(@RequestBody StatusDTO statusDTO){
+        Status status = statusMapper.toEntity(statusDTO);
+        statusService.save(status);
+        URI uri =  gerarHeaderLocation(status.getIdStatus());
+        return ResponseEntity.created(uri).build();
     }
 
     // PUT /api/status/{id} - Atualiza um status existente

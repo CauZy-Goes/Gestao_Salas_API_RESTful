@@ -30,8 +30,8 @@ public class StatusService {
         return statusRepository.findById(id).orElse(null);
     }
 
-    public StatusDTO save(StatusDTO statusDTO) {
-        return null;
+    public Status save(Status status) {
+        return statusRepository.save(status);
     }
 
     public StatusDTO update(Integer id, StatusDTO statusDTO) {
