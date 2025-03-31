@@ -83,5 +83,16 @@ public class EspacoFisicoController implements GenericController{
 
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Deletar", description = "Deletar Espaco Físico")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "EspacoFisico Deletado Com Sucesso"),
+            @ApiResponse(responseCode = "404", description = "Espaco físico não encontrado")
+    })
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        espacoFisicoService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
 
