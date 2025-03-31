@@ -17,7 +17,7 @@ public interface SolicitacoesRepository extends JpaRepository<Solicitacoes, Inte
     // Buscar todas as solicitações feitas por um professor específico
      List<Solicitacoes> findByUsuarioSolicitante_IdUsuario(Integer idUsuarioSolicitante);
 
-     Optional<Solicitacoes> findByStatus(Status status);
+    List<Solicitacoes> findByStatus(Status status);
 
     @Modifying
     @Query("DELETE FROM Solicitacoes s WHERE s.espacoFisico.idEspacoFisico = :idEspaco")
