@@ -46,8 +46,8 @@ public class StatusController implements GenericController {
     @GetMapping("/{id}")
     @Operation(summary = "Buscar pelo ID", description = "Buscar status pelo ID")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Cargo encontrado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Cargo não encontrado")
+            @ApiResponse(responseCode = "200", description = "Status encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Status não encontrado")
     })
     public ResponseEntity<StatusDTO> findById(@PathVariable Integer id){
         StatusDTO statusDTO = statusMapper.toDTO(statusService.findById(id));

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ucsal.cauzy.domain.entity.EspacoFisico;
 import ucsal.cauzy.domain.service.EspacoFisicoService;
 import ucsal.cauzy.rest.dto.EspacoFisicoDTO;
 import ucsal.cauzy.rest.dto.EspacoFisicoPesquisaDTO;
@@ -40,6 +41,17 @@ public class EspacoFisicoController implements GenericController{
                 .toList();
 
         return ResponseEntity.ok(listaEspacos);
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Buscar pelo ID", description = "Buscar Espaco Físico pelo ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Espaco Físico encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Espaco Físico não encontrado")
+    })
+    public ResponseEntity<EspacoFisicoPesquisaDTO> findById(@PathVariable Integer id){
+        EspacoFisicoPesquisaDTO espacoFisicoPesquisaDTO = espacoFisicoMapper.toDTO(espacoFisicoService.findById(id));
+        return ResponseEntity.ok(espacoFisicoPesquisaDTO);
     }
 }
 
