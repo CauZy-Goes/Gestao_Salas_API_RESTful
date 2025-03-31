@@ -55,7 +55,7 @@ public class tipoSalaController implements GenericController{
     }
 
     @PostMapping
-    @Operation(summary = "Salvar", description = "Savlar um novo Tipo De Sala")
+    @Operation(summary = "Salvar", description = "Salvar um novo Tipo De Sala")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Tipo Sala Criado Com Sucesso")
     })
@@ -65,5 +65,26 @@ public class tipoSalaController implements GenericController{
         URI uri = gerarHeaderLocation(tipoSala.getIdTipoSala());
         return ResponseEntity.created(uri).build();
     }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Modificar", description = "Modificar Tipo De Sala")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Tipo Sala Modificado Com Sucesso"),
+            @ApiResponse(responseCode = "404", description = "Tipo Sala Não Encontrado"),
+    })
+    public ResponseEntity<Void> update(@RequestBody @Valid TipoSalaDTO tipoSalaDto, @PathVariable Integer id){
+        TipoSala tipoSala = tipoSalaMapper.toEntity(tipoSalaDto);
+        tipoSalaService.update(tipoSala,id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+//    @PutMapping
+//    @Operation(summary = "Modificar", description = "Modificar Tipo De Sala")
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "204", description = "Tipo Sala Modificado Com Sucesso"),
+//            @ApiResponse(responseCode = "404", description = "Tipo Sala Não Encontrado"),
+//            @ApiResponse(responseCode = "409", description = "alguma entidade depende desse Tipo Sala")
+//    })
 }
 

@@ -37,6 +37,7 @@ public class TipoSalaService {
     public TipoSala update(TipoSala tipoSala, Integer id){
         tipoSalaValidador.existsTipoSala(id);
         tipoSalaValidador.validateDependencies(id);
+        tipoSala.setIdTipoSala(id);
         return tipoSalaRepository.save(tipoSala);
     }
 
