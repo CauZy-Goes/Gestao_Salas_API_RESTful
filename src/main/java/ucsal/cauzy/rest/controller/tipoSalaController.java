@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name="TipoSala")
 @Slf4j
-public class tipoSalaController implements GenericController{
+public class tipoSalaController implements GenericController {
 
     private final TipoSalaService tipoSalaService;
 
@@ -35,7 +35,7 @@ public class tipoSalaController implements GenericController{
             @ApiResponse(responseCode = "200", description = "Sucesso na busca"),
             @ApiResponse(responseCode = "404", description = "Tipo De Sala Não foi encontrado")
     })
-    public ResponseEntity<TipoSalaDTO> findById(@PathVariable Integer id){
+    public ResponseEntity<TipoSalaDTO> findById(@PathVariable Integer id) {
         TipoSala tipoSala = tipoSalaService.findById(id);
         return ResponseEntity.ok(tipoSalaMapper.toDTO(tipoSala));
     }
@@ -45,7 +45,7 @@ public class tipoSalaController implements GenericController{
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Sucesso Na Busca")
     })
-    public ResponseEntity<List<TipoSalaDTO>> findAll(){
+    public ResponseEntity<List<TipoSalaDTO>> findAll() {
         List<TipoSalaDTO> tipoSalas = tipoSalaService.findAll()
                 .stream()
                 .map(tipoSalaMapper::toDTO)
@@ -59,7 +59,7 @@ public class tipoSalaController implements GenericController{
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Tipo Sala Criado Com Sucesso")
     })
-    public ResponseEntity<Void> save(@RequestBody @Valid TipoSalaDTO tipoSalaDto){
+    public ResponseEntity<Void> save(@RequestBody @Valid TipoSalaDTO tipoSalaDto) {
         TipoSala tipoSala = tipoSalaMapper.toEntity(tipoSalaDto);
         tipoSalaService.save(tipoSala);
         URI uri = gerarHeaderLocation(tipoSala.getIdTipoSala());
@@ -72,19 +72,24 @@ public class tipoSalaController implements GenericController{
             @ApiResponse(responseCode = "204", description = "Tipo Sala Modificado Com Sucesso"),
             @ApiResponse(responseCode = "404", description = "Tipo Sala Não Encontrado"),
     })
-    public ResponseEntity<Void> update(@RequestBody @Valid TipoSalaDTO tipoSalaDto, @PathVariable Integer id){
+    public ResponseEntity<Void> update(@RequestBody @Valid TipoSalaDTO tipoSalaDto, @PathVariable Integer id) {
         TipoSala tipoSala = tipoSalaMapper.toEntity(tipoSalaDto);
-        tipoSalaService.update(tipoSala,id);
+        tipoSalaService.update(tipoSala, id);
 
         return ResponseEntity.noContent().build();
     }
 
-//    @PutMapping
-//    @Operation(summary = "Modificar", description = "Modificar Tipo De Sala")
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "204", description = "Tipo Sala Modificado Com Sucesso"),
-//            @ApiResponse(responseCode = "404", description = "Tipo Sala Não Encontrado"),
-//            @ApiResponse(responseCode = "409", description = "alguma entidade depende desse Tipo Sala")
-//    })
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Modificar", description = "Modificar Tipo De Sala")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Tipo Sala Deletado Com Sucesso"),
+            @ApiResponse(responseCode = "404", description = "Tipo Sala Não Encontrado"),
+            @ApiResponse(responseCode = "409", description = "Alguma Entidade Depende Desse Tipo Sala")
+    })
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        tipoSalaService.delete(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }
 
