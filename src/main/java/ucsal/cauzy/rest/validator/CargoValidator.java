@@ -25,7 +25,7 @@ public class CargoValidator {
     public void validateDependencies (Integer id) {
         existsCargo(id);
         Cargo cargo = cargoRepository.findById(id).get();
-        if (usuarioRepository.findByCargo(cargo).isPresent()) {
+        if (!usuarioRepository.findByCargo(cargo).isEmpty()) {
             throw new ResourceInUseException("Algum usuário depende desse cargo");
         };
     }
