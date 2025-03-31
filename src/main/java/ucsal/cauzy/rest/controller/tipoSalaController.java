@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import ucsal.cauzy.domain.service.TipoSalaService;
 import ucsal.cauzy.rest.dto.TipoSalaDTO;
 import ucsal.cauzy.rest.mapper.TipoSalaMapper;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -52,5 +54,16 @@ public class tipoSalaController implements GenericController{
         return ResponseEntity.ok(tipoSalas);
     }
 
+    @PostMapping
+    @Operation(summary = "Salvar", description = "Savlar um novo Tipo De Sala")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Tipo Sala Criado Com Sucesso")
+    })
+    public ResponseEntity<Void> save(@RequestBody @Valid TipoSalaDTO tipoSalaDto){
+        TipoSala tipoSala = tipoSalaMapper.toEntity(tipoSalaDto);
+        tipoSalaService.save(tipoSala);
+        URI uri = gerarHeaderLocation(tipoSala.getIdTipoSala());
+        return ResponseEntity.created(uri).build();
+    }
 }
 
