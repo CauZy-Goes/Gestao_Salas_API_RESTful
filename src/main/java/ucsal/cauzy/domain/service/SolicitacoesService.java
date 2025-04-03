@@ -31,6 +31,10 @@ public class SolicitacoesService {
         return solicitacoesRepository.findById(id).get();
     }
 
+    public List<Solicitacoes> findAll(){
+        return solicitacoesRepository.findAll();
+    }
+
     public Solicitacoes salvar(Solicitacoes solicitacoes) {
         return solicitacoesRepository.save(solicitacoes);
     }

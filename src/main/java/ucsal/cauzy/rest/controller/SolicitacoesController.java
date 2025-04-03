@@ -28,6 +28,19 @@ public class SolicitacoesController implements GenericController {
 
     private final SolicitacoesMapper solicitacoesMapper;
 
+    @GetMapping
+    @Operation(summary = "Buscar Todos", description = "Busca Todas As Solicitacões")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sucesso ao buscar todos")
+    })
+    public ResponseEntity<List<SolicitacoesPesquisaDTO>> findAll() {
+        List<SolicitacoesPesquisaDTO> solicitacoesPesquisaDTO = solicitacoesService.findAll()
+                .stream()
+                .map(solicitacoesMapper::toDTO)
+                .toList();
+        return ResponseEntity.ok(solicitacoesPesquisaDTO);
+    }
+
     @GetMapping("/{id}")
     @Operation(summary = "Buscar", description = "Buscar Solicitacao Pelo ID")
     @ApiResponses({
