@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.parsers.ReturnTypeParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import ucsal.cauzy.rest.dto.SolicitacoesDTO;
 import ucsal.cauzy.rest.dto.SolicitacoesPesquisaDTO;
 import ucsal.cauzy.rest.mapper.SolicitacoesMapper;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -53,5 +55,18 @@ public class SolicitacoesController implements GenericController {
 
         return ResponseEntity.ok(solicitacoesPesquisaDTO);
     }
+
+    @PostMapping
+    @Operation(summary = "Salvar", description = "Salvar Solicitacão")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Solicitação Criada Com Sucesso")
+    })
+    public ResponseEntity<Void> save(@RequestBody SolicitacoesDTO solicitacoesDTO) {
+        Solicitacoes solicitacoes = solicitacoesMapper.toEntity(solicitacoesDTO);
+        solicitacoesService.salvar(solicitacoes);
+        URI uri = gerarHeaderLocation(solicitacoes.getIdSolicitacoes());
+        return ResponseEntity.created(uri).build();
+    }
+
 }
 
