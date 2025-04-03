@@ -25,4 +25,24 @@ public class SolicitacoesService {
     private final SolicitacoesRepository solicitacoesRepository;
 
     private final SolicitacoesValidator solicitacoesValidator;
+
+    public Solicitacoes findById(Integer id) {
+        solicitacoesValidator.existsSolicitacao(id);
+        return solicitacoesRepository.findById(id).get();
+    }
+
+    public Solicitacoes salvar(Solicitacoes solicitacoes) {
+        return solicitacoesRepository.save(solicitacoes);
+    }
+
+    public void update (Integer id, Solicitacoes solicitacoes) {
+        solicitacoesValidator.existsSolicitacao(id);
+        solicitacoes.setIdSolicitacoes(id);
+        solicitacoesRepository.save(solicitacoes);
+    }
+
+    public void excluir(Integer id) {
+        solicitacoesValidator.existsSolicitacao(id);
+        solicitacoesRepository.deleteById(id);
+    }
 }
