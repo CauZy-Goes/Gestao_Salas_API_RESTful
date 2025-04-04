@@ -17,7 +17,7 @@ public class TipoSalaValidador {
     private final EspacoFisicoRepository espacoFisicoRepository;
 
     public void existsTipoSala(Integer id){
-        if(!tipoSalaRepository.existsById(id)){
+        if(!tipoSalaRepository.existsById(id) ){
             throw new NotFoundException("Tipo sala não encontrado com o id : " + id);
         }
     }
