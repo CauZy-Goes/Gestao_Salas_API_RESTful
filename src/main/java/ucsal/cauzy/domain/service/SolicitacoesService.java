@@ -1,7 +1,13 @@
 package ucsal.cauzy.domain.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import ucsal.cauzy.domain.entity.EspacoFisico;
 import ucsal.cauzy.domain.entity.Solicitacoes;
 import ucsal.cauzy.domain.entity.Status;
 import ucsal.cauzy.domain.entity.Usuario;
@@ -12,80 +18,73 @@ import ucsal.cauzy.domain.repository.UsuarioRepository;
 import ucsal.cauzy.domain.utils.exception.ResourceNotFoundException;
 import ucsal.cauzy.rest.dto.SolicitacoesDTO;
 import ucsal.cauzy.rest.mapper.SolicitacoesMapper;
+import ucsal.cauzy.rest.validator.SolicitacoesValidator;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ucsal.cauzy.domain.repository.Specs.SolicitacoesSpecs.*;
+
 @Service
+@RequiredArgsConstructor
 public class SolicitacoesService {
 
-    @Autowired
-    private SolicitacoesRepository solicitacoesRepository;
+    private final SolicitacoesRepository solicitacoesRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private SolicitacoesMapper solicitacoesMapper;
-
-    @Autowired
-    private EspacoFisicoRepository espacoFisicoRepository;
-
-    @Autowired
-    private StatusRepository statusRepository;
-
-    @Autowired
-    private EmailService emailService;
-
-    public List<SolicitacoesDTO> findAll() {
-        return null;
-    }
+    private final SolicitacoesValidator solicitacoesValidator;
 
     public Solicitacoes findById(Integer id) {
+        solicitacoesValidator.existsSolicitacao(id);
         return solicitacoesRepository.findById(id).get();
     }
 
-    public List<SolicitacoesDTO> findByUsuarioSolicitanteId(Integer id) {
-        return null;
+    public List<Solicitacoes> findAll(){
+        return solicitacoesRepository.findAll();
     }
 
-    public SolicitacoesDTO save(SolicitacoesDTO solicitacoesDTO) {
-        Solicitacoes solicitacoes = tratarSolicitacoes(solicitacoesDTO);
-        Solicitacoes savedSolicitacoes = solicitacoesRepository.save(solicitacoes);
-        return null;
+    public Solicitacoes salvar(Solicitacoes solicitacoes) {
+        return solicitacoesRepository.save(solicitacoes);
     }
 
-    private Solicitacoes tratarSolicitacoes(SolicitacoesDTO solicitacoesDTO) {
-        Solicitacoes solicitacoes = solicitacoesMapper.toEntity(solicitacoesDTO);
-
-        Usuario usuarioAvaliador = solicitacoesDTO.idUsuarioAvaliador() == null ? null :
-                usuarioRepository.findById(solicitacoesDTO.idUsuarioAvaliador()).orElse(null);
-
-        Status status = solicitacoesDTO.idStatus() == null ? null :
-                statusRepository.findById(solicitacoesDTO.idStatus()).orElse(null);
-
-        solicitacoes.setUsuarioAvaliador(usuarioAvaliador);
-        solicitacoes.setStatus(status);
-        return solicitacoes;
-    }
-
-    public SolicitacoesDTO update(Integer id, SolicitacoesDTO solicitacoesDTO) {
-        if (!solicitacoesRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Solicitação", id);
-        }
-        Solicitacoes solicitacoes = tratarSolicitacoes(solicitacoesDTO);
+    public void update (Integer id, Solicitacoes solicitacoes) {
+        solicitacoesValidator.existsSolicitacao(id);
         solicitacoes.setIdSolicitacoes(id);
-        Solicitacoes updatedSolicitacoes = solicitacoesRepository.save(solicitacoes);
-
-        emailService.enviarNotificacaoAlteracao(updatedSolicitacoes);
-
-        return  null;
+        solicitacoesRepository.save(solicitacoes);
     }
 
-    public void delete(Integer id) {
-        if (!solicitacoesRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Solicitação", id);
-        }
+    public void excluir(Integer id) {
+        solicitacoesValidator.existsSolicitacao(id);
         solicitacoesRepository.deleteById(id);
+    }
+
+    public Page<Solicitacoes> pesquisa(
+            Usuario usuarioAvaliador,
+            Usuario usuarioSolicitante,
+            EspacoFisico espacoFisico,
+            Status status,
+            Integer pagina,
+            Integer tamanhoPagina){
+
+        Specification specs = Specification.where((root, query, cb) -> cb.conjunction());
+
+        if(usuarioAvaliador != null){
+            specs = specs.and(usuarioAvaliadorEqual(usuarioAvaliador));
+        }
+
+        if (usuarioSolicitante != null) {
+            specs = specs.and(usuarioSolicitanteEqual(usuarioSolicitante));
+        }
+
+        if (espacoFisico != null) {
+            specs = specs.and(usuarioEspacoFisicoEqual(espacoFisico));
+        }
+
+        if (status != null) {
+            specs = specs.and(usuarioStatusEqual(status));
+        }
+
+        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
+
+        return solicitacoesRepository.findAll(specs, pageRequest);
     }
 }

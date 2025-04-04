@@ -8,9 +8,9 @@ public record SolicitacoesPesquisaDTO(
         LocalDateTime dataHoraSolicitacao,
         LocalDateTime dataHoraAprovacao,
         LocalDateTime dataHoraLocacao,
-        UsuarioPesquisaDTO UsuarioAvaliador,
-        UsuarioPesquisaDTO UsuarioSolicitante,
-        EspacoFisicoPesquisaDTO EspacoFisico,
-        StatusDTO Status
+        UsuarioPesquisaDTO usuarioAvaliador,
+        UsuarioPesquisaDTO usuarioSolicitante,
+        EspacoFisicoPesquisaDTO espacoFisico,
+        StatusDTO status
 ) {
 }

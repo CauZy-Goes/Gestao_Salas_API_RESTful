@@ -17,5 +17,4 @@ public class SolicitacoesValidator {
             throw new NotFoundException("Solicitacao não encontrada com o ID: " + id);
         }
     }
-
 }

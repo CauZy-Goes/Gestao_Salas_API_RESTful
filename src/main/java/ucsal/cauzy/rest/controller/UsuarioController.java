@@ -31,7 +31,6 @@ public class UsuarioController implements GenericController{
     private final UsuarioService usuarioService;
 
     private final UsuarioMapper usuarioMapper;
-    private final HandlerMapping resourceHandlerMapping;
 
     @GetMapping
     @Operation(summary = "Buscar Todos", description = "Busca todos os usuarios")
