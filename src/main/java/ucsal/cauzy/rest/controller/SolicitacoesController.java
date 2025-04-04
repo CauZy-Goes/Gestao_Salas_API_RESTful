@@ -6,18 +6,22 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.parsers.ReturnTypeParser;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ucsal.cauzy.domain.entity.EspacoFisico;
 import ucsal.cauzy.domain.entity.Solicitacoes;
+import ucsal.cauzy.domain.entity.Status;
+import ucsal.cauzy.domain.entity.Usuario;
+import ucsal.cauzy.domain.repository.EspacoFisicoRepository;
+import ucsal.cauzy.domain.repository.StatusRepository;
+import ucsal.cauzy.domain.repository.UsuarioRepository;
 import ucsal.cauzy.domain.service.SolicitacoesService;
 import ucsal.cauzy.rest.dto.SolicitacoesDTO;
 import ucsal.cauzy.rest.dto.SolicitacoesPesquisaDTO;
 import ucsal.cauzy.rest.mapper.SolicitacoesMapper;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("solicitacoes")
@@ -30,18 +34,24 @@ public class SolicitacoesController implements GenericController {
 
     private final SolicitacoesMapper solicitacoesMapper;
 
-    @GetMapping
-    @Operation(summary = "Buscar Todos", description = "Busca Todas As Solicitacões")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Sucesso ao buscar todos")
-    })
-    public ResponseEntity<List<SolicitacoesPesquisaDTO>> findAll() {
-        List<SolicitacoesPesquisaDTO> solicitacoesPesquisaDTO = solicitacoesService.findAll()
-                .stream()
-                .map(solicitacoesMapper::toDTO)
-                .toList();
-        return ResponseEntity.ok(solicitacoesPesquisaDTO);
-    }
+    private final UsuarioRepository usuarioRepository;
+
+    private final EspacoFisicoRepository espacoFisicoRepository;
+
+    private final StatusRepository statusRepository;
+
+//    @GetMapping
+//    @Operation(summary = "Buscar Todos", description = "Busca Todas As Solicitacões")
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "Sucesso ao buscar todos")
+//    })
+//    public ResponseEntity<List<SolicitacoesPesquisaDTO>> findAll() {
+//        List<SolicitacoesPesquisaDTO> solicitacoesPesquisaDTO = solicitacoesService.findAll()
+//                .stream()
+//                .map(solicitacoesMapper::toDTO)
+//                .toList();
+//        return ResponseEntity.ok(solicitacoesPesquisaDTO);
+//    }
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar", description = "Buscar Solicitacao Pelo ID")
@@ -90,6 +100,41 @@ public class SolicitacoesController implements GenericController {
         solicitacoesService.excluir(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    @Operation(summary = "Pesquisar", description = "Pesquisa solicitacões")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "As solicitacões foram pesquisadas")
+    })
+    public ResponseEntity<Page<SolicitacoesPesquisaDTO>> pesquisa(
+            @RequestParam(value = "usuarioAvaliador", required = false)
+            Integer idUsuarioAvaliador,
+            @RequestParam(value = "usuarioSolicitante", required = false)
+            Integer idUsuarioSolicitante,
+            @RequestParam(value = "espacoFisico", required = false)
+            Integer idEspacoFisico,
+            @RequestParam(value = "status", required = false)
+            Integer idStatus,
+            @RequestParam(value = "pagina", defaultValue = "0")
+            Integer pagina,
+            @RequestParam(value = "tamanho-pagina", defaultValue = "10")
+            Integer tamanhoPagina
+    ) {
+        Page<Solicitacoes> paginaResultado = transformarEPerquisa(idUsuarioAvaliador, idUsuarioSolicitante, idEspacoFisico, idStatus, pagina, tamanhoPagina);
+
+        Page<SolicitacoesPesquisaDTO> resultado = paginaResultado.map(solicitacoesMapper::toDTO);
+
+        return ResponseEntity.ok(resultado);
+    }
+
+    public Page<Solicitacoes> transformarEPerquisa(Integer idUsuarioAvaliador, Integer idUsuarioSolicitante, Integer idEspacoFisico, Integer idStatus, Integer pagina, Integer tamanhoPagina) {
+        Usuario usuarioAvaliador = (idUsuarioAvaliador != null) ? usuarioRepository.findById(idUsuarioAvaliador).orElse(null) : null;
+        Usuario usuarioSolicitante = (idUsuarioSolicitante != null) ? usuarioRepository.findById(idUsuarioSolicitante).orElse(null) : null;
+        EspacoFisico espacoFisico = (idEspacoFisico != null) ? espacoFisicoRepository.findById(idEspacoFisico).orElse(null) : null;
+        Status status = (idStatus != null) ? statusRepository.findById(idStatus).orElse(null) : null;
+
+        return solicitacoesService.pesquisa(usuarioAvaliador, usuarioSolicitante, espacoFisico, status, pagina, tamanhoPagina);
     }
 }
 
