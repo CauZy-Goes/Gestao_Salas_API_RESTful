@@ -59,7 +59,7 @@ public class SolicitacoesController implements GenericController {
     @PostMapping
     @Operation(summary = "Salvar", description = "Salvar Solicitacão")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Solicitação Criada Com Sucesso")
+            @ApiResponse(responseCode = "201", description = "Solicitação Criada Com Sucesso"),
     })
     public ResponseEntity<Void> save(@RequestBody SolicitacoesDTO solicitacoesDTO) {
         Solicitacoes solicitacoes = solicitacoesMapper.toEntity(solicitacoesDTO);
@@ -76,6 +76,18 @@ public class SolicitacoesController implements GenericController {
     })
     public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody SolicitacoesDTO solicitacoesDTO) {
         solicitacoesService.update(id, solicitacoesMapper.toEntity(solicitacoesDTO));
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Deletar",description = "Deletar a Solicitacao")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "A solicitação foi deletada"),
+            @ApiResponse(responseCode = "404", description = "A Solicitacão não foi encontrada pelo id")
+    })
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        solicitacoesService.excluir(id);
 
         return ResponseEntity.noContent().build();
     }
