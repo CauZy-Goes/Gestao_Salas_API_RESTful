@@ -22,6 +22,9 @@ public class TipoSalaService {
     private final TipoSalaValidador tipoSalaValidador;
 
     public TipoSala findById(Integer id) {
+        if (id == null){
+            return null;
+        }
         tipoSalaValidador.existsTipoSala(id);
         return tipoSalaRepository.findById(id).get();
     }

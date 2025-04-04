@@ -121,20 +121,12 @@ public class SolicitacoesController implements GenericController {
             @RequestParam(value = "tamanho-pagina", defaultValue = "10")
             Integer tamanhoPagina
     ) {
-        Page<Solicitacoes> paginaResultado = transformarEPerquisa(idUsuarioAvaliador, idUsuarioSolicitante, idEspacoFisico, idStatus, pagina, tamanhoPagina);
+        Page<Solicitacoes> paginaResultado = solicitacoesService.pesquisa
+                (idUsuarioAvaliador,  idUsuarioSolicitante,  idEspacoFisico,  idStatus,  pagina, tamanhoPagina);
 
         Page<SolicitacoesPesquisaDTO> resultado = paginaResultado.map(solicitacoesMapper::toDTO);
 
         return ResponseEntity.ok(resultado);
-    }
-
-    public Page<Solicitacoes> transformarEPerquisa(Integer idUsuarioAvaliador, Integer idUsuarioSolicitante, Integer idEspacoFisico, Integer idStatus, Integer pagina, Integer tamanhoPagina) {
-        Usuario usuarioAvaliador = (idUsuarioAvaliador != null) ? usuarioRepository.findById(idUsuarioAvaliador).orElse(null) : null;
-        Usuario usuarioSolicitante = (idUsuarioSolicitante != null) ? usuarioRepository.findById(idUsuarioSolicitante).orElse(null) : null;
-        EspacoFisico espacoFisico = (idEspacoFisico != null) ? espacoFisicoRepository.findById(idEspacoFisico).orElse(null) : null;
-        Status status = (idStatus != null) ? statusRepository.findById(idStatus).orElse(null) : null;
-
-        return solicitacoesService.pesquisa(usuarioAvaliador, usuarioSolicitante, espacoFisico, status, pagina, tamanhoPagina);
     }
 }
 

@@ -58,10 +58,10 @@ public class SolicitacoesService {
     }
 
     public Page<Solicitacoes> pesquisa(
-            Usuario usuarioAvaliador,
-            Usuario usuarioSolicitante,
-            EspacoFisico espacoFisico,
-            Status status,
+            Integer usuarioAvaliador,
+            Integer usuarioSolicitante,
+            Integer espacoFisico,
+            Integer status,
             Integer pagina,
             Integer tamanhoPagina){
 
