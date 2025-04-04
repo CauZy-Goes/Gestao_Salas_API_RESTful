@@ -2,7 +2,12 @@ package ucsal.cauzy.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import ucsal.cauzy.domain.entity.EspacoFisico;
 import ucsal.cauzy.domain.entity.Solicitacoes;
 import ucsal.cauzy.domain.entity.Status;
 import ucsal.cauzy.domain.entity.Usuario;
@@ -17,6 +22,8 @@ import ucsal.cauzy.rest.validator.SolicitacoesValidator;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ucsal.cauzy.domain.repository.Specs.SolicitacoesSpecs.*;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +55,36 @@ public class SolicitacoesService {
     public void excluir(Integer id) {
         solicitacoesValidator.existsSolicitacao(id);
         solicitacoesRepository.deleteById(id);
+    }
+
+    public Page<Solicitacoes> pesquisa(
+            Usuario usuarioAvaliador,
+            Usuario usuarioSolicitante,
+            EspacoFisico espacoFisico,
+            Status status,
+            Integer pagina,
+            Integer tamanhoPagina){
+
+        Specification specs = Specification.where((root, query, cb) -> cb.conjunction());
+
+        if(usuarioAvaliador != null){
+            specs = specs.and(usuarioAvaliadorEqual(usuarioAvaliador));
+        }
+
+        if (usuarioSolicitante != null) {
+            specs = specs.and(usuarioSolicitanteEqual(usuarioSolicitante));
+        }
+
+        if (espacoFisico != null) {
+            specs = specs.and(usuarioEspacoFisicoEqual(espacoFisico));
+        }
+
+        if (status != null) {
+            specs = specs.and(usuarioStatusEqual(status));
+        }
+
+        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
+
+        return solicitacoesRepository.findAll(specs, pageRequest);
     }
 }
