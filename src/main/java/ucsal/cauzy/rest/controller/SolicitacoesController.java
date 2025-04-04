@@ -68,5 +68,16 @@ public class SolicitacoesController implements GenericController {
         return ResponseEntity.created(uri).build();
     }
 
+    @PutMapping("/{id}")
+    @Operation(summary = "Modificar",description = "Modifica a Solicitacao")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "A solicitação foi modificada"),
+            @ApiResponse(responseCode = "404", description = "A Solicitacão não foi encontrada pelo id")
+    })
+    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody SolicitacoesDTO solicitacoesDTO) {
+        solicitacoesService.update(id, solicitacoesMapper.toEntity(solicitacoesDTO));
+
+        return ResponseEntity.noContent().build();
+    }
 }
 
