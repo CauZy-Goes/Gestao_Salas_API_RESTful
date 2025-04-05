@@ -1,7 +1,7 @@
 package ucsal.cauzy.domain.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ucsal.cauzy.domain.entity.Cargo;
+import org.springframework.stereotype.Repository;
 import ucsal.cauzy.domain.entity.Client;
 
 public interface ClientRepository extends JpaRepository<Client, Integer> {
