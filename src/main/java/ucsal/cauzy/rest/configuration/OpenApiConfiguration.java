@@ -19,17 +19,18 @@ import org.springframework.context.annotation.Configuration;
                         email = "cauafariasdev@gmail.com",
                         url = "getaosalasapi.com"
                 )
-        )
-//        security = {
-//                @SecurityRequirement(name = "bearerAuth")
-//        }
+        ),
+        security = {
+                @SecurityRequirement(name = "bearerAuth")
+       }
 )
-//@SecurityScheme(
-//        name = "bearerAuth",
-//        type = SecuritySchemeType.HTTP,
-//        bearerFormat = "JWT",
-//        scheme = "bearer",
-//        in = SecuritySchemeIn.HEADER
-//)
+
+@SecurityScheme(
+        name = "bearerAuth",
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT",
+        scheme = "bearer",
+        in = SecuritySchemeIn.HEADER
+)
 public class OpenApiConfiguration {
 }

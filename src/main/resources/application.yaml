@@ -26,8 +26,25 @@ spring:
             enable: true
           ssl:
             trust: ${MAIL_SMTP}
+
 server:
   port: 8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      base-path: /actuator
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: API de Gestão de Espaços Físicos
+    description: API RESTful desenvolvida com Spring Boot, Spring Security e JWT
+    version: 1.0.0
 
 logging:
   level:

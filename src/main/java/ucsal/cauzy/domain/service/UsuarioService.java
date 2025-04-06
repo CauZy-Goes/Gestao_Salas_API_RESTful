@@ -28,6 +28,10 @@ public class UsuarioService {
 
     private final UsuarioValidator usuarioValidator;
 
+    public Usuario findByEmail(String email) {
+        return usuarioRepository.findByEmail(email).orElse(null);
+    }
+
     public List<Usuario> findAll(){
         return usuarioRepository.findAll();
     }
