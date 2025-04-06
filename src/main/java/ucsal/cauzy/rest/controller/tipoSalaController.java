@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ucsal.cauzy.domain.entity.TipoSala;
 import ucsal.cauzy.domain.service.TipoSalaService;
@@ -29,6 +30,12 @@ public class tipoSalaController implements GenericController {
     private final TipoSalaService tipoSalaService;
 
     private final TipoSalaMapper tipoSalaMapper;
+
+    @GetMapping("/debugAuthorities")
+    public ResponseEntity<?> debugAuthorities() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        return ResponseEntity.ok(auth.getAuthorities());
+    }
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar Pelo Id", description = "Busca O Tipo De Sala Pelo ID")

@@ -4,17 +4,24 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import ucsal.cauzy.domain.repository.UsuarioRepository;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -44,7 +51,9 @@ public class WebSecurityConfig {
                         .requestMatchers("/oauth2/token").permitAll()
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                )
                 .addFilterAfter(jwtCustomAuthenticationFilter, BearerTokenAuthenticationFilter.class);
 
         return http.build();
@@ -56,11 +65,34 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
+    public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers(
                 "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
                 "/swagger-resources/**", "/webjars/**", "/actuator/**"
         );
     }
+
+    // ✅ Converte o scope do JWT para ROLE_
+    private Converter<Jwt, ? extends AbstractAuthenticationToken> jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
+        converter.setAuthorityPrefix("ROLE_");
+        converter.setAuthoritiesClaimName("scope");
+
+        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
+
+        // Envolve o conversor original para transformar em maiúsculo
+        jwtConverter.setJwtGrantedAuthoritiesConverter(jwt ->
+                converter.convert(jwt)
+                        .stream()
+                        .map(grantedAuthority ->
+                                new SimpleGrantedAuthority(grantedAuthority.getAuthority().toUpperCase())
+                        )
+                        .collect(Collectors.toList())
+        );
+
+        return jwtConverter;
+    }
+
 }
+
 
