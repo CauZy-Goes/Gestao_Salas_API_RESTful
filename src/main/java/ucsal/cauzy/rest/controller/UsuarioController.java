@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.HandlerMapping;
 import ucsal.cauzy.domain.entity.Usuario;
@@ -37,6 +38,7 @@ public class UsuarioController implements GenericController{
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Busca efetuada com sucesso")
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<List<UsuarioPesquisaDTO>> findAll() {
         List<UsuarioPesquisaDTO> usuarios = usuarioService.findAll()
                                             .stream()
@@ -52,6 +54,7 @@ public class UsuarioController implements GenericController{
             @ApiResponse(responseCode = "200", description = "Busca efetuada com sucesso"),
             @ApiResponse(responseCode = "404", description = "O Usuario não foi encontrado"),
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<UsuarioPesquisaDTO> findById(@PathVariable Integer id) {
         UsuarioPesquisaDTO usuario = usuarioMapper.toDTO(usuarioService.findById(id));
 
@@ -78,6 +81,7 @@ public class UsuarioController implements GenericController{
             @ApiResponse(responseCode = "404", description = "Usuário Não encontrado"),
             @ApiResponse(responseCode = "409", description = "O email que foi modificado esta em uso"),
     })
+    @PreAuthorize("hasAnyRole('GESTOR', 'PROFESSOR')")
     public ResponseEntity<Void> update(@RequestBody @Valid UsuarioDTO usuarioDTO, @PathVariable Integer id){
         usuarioService.update(usuarioMapper.toEntity(usuarioDTO) , id);
 
@@ -90,6 +94,7 @@ public class UsuarioController implements GenericController{
             @ApiResponse(responseCode = "204", description = "Usuario Deletado Com Sucesso"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         usuarioService.delete(id);
         return ResponseEntity.noContent().build();
