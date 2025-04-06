@@ -4,8 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "usuario")
@@ -37,6 +41,10 @@ public class Usuario implements Serializable {
 			this.cargo = new Cargo();
 			this.cargo.setIdCargo(2); // Define o status "Professor" por padrão
 		}
+	}
+
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority("ROLE_" + cargo.getNomeCargo().toUpperCase()));
 	}
 
 //	public Integer getIdUsuario() {

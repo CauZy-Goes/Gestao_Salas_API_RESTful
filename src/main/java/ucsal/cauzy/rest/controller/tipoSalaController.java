@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ucsal.cauzy.domain.entity.TipoSala;
 import ucsal.cauzy.domain.service.TipoSalaService;
@@ -35,6 +36,7 @@ public class tipoSalaController implements GenericController {
             @ApiResponse(responseCode = "200", description = "Sucesso na busca"),
             @ApiResponse(responseCode = "404", description = "Tipo De Sala Não foi encontrado")
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<TipoSalaDTO> findById(@PathVariable Integer id) {
         TipoSala tipoSala = tipoSalaService.findById(id);
         return ResponseEntity.ok(tipoSalaMapper.toDTO(tipoSala));
@@ -45,6 +47,7 @@ public class tipoSalaController implements GenericController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Sucesso Na Busca")
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<List<TipoSalaDTO>> findAll() {
         List<TipoSalaDTO> tipoSalas = tipoSalaService.findAll()
                 .stream()
@@ -59,6 +62,7 @@ public class tipoSalaController implements GenericController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Tipo Sala Criado Com Sucesso")
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<Void> save(@RequestBody @Valid TipoSalaDTO tipoSalaDto) {
         TipoSala tipoSala = tipoSalaMapper.toEntity(tipoSalaDto);
         tipoSalaService.save(tipoSala);
@@ -72,6 +76,7 @@ public class tipoSalaController implements GenericController {
             @ApiResponse(responseCode = "204", description = "Tipo Sala Modificado Com Sucesso"),
             @ApiResponse(responseCode = "404", description = "Tipo Sala Não Encontrado"),
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<Void> update(@RequestBody @Valid TipoSalaDTO tipoSalaDto, @PathVariable Integer id) {
         TipoSala tipoSala = tipoSalaMapper.toEntity(tipoSalaDto);
         tipoSalaService.update(tipoSala, id);
@@ -86,6 +91,7 @@ public class tipoSalaController implements GenericController {
             @ApiResponse(responseCode = "404", description = "Tipo Sala Não Encontrado"),
             @ApiResponse(responseCode = "409", description = "Alguma Entidade Depende Desse Tipo Sala")
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         tipoSalaService.delete(id);
 
