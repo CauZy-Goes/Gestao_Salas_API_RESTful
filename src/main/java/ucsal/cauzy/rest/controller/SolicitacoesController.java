@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ucsal.cauzy.domain.entity.EspacoFisico;
 import ucsal.cauzy.domain.entity.Solicitacoes;
@@ -59,6 +60,7 @@ public class SolicitacoesController implements GenericController {
             @ApiResponse(responseCode = "200", description = "Buscar de Solicitacão Feita Com Sucesso"),
             @ApiResponse(responseCode = "404", description = "A Solicitacão Não Foi Encontrada")
     })
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<SolicitacoesPesquisaDTO> findByID(@PathVariable Integer id) {
         SolicitacoesPesquisaDTO solicitacoesPesquisaDTO = solicitacoesMapper.
                 toDTO(solicitacoesService.findById(id));
@@ -71,6 +73,7 @@ public class SolicitacoesController implements GenericController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Solicitação Criada Com Sucesso"),
     })
+    @PreAuthorize("hasRole('PROFESSOR')")
     public ResponseEntity<Void> save(@RequestBody SolicitacoesDTO solicitacoesDTO) {
         Solicitacoes solicitacoes = solicitacoesMapper.toEntity(solicitacoesDTO);
         solicitacoesService.salvar(solicitacoes);
@@ -84,6 +87,7 @@ public class SolicitacoesController implements GenericController {
             @ApiResponse(responseCode = "204", description = "A solicitação foi modificada"),
             @ApiResponse(responseCode = "404", description = "A Solicitacão não foi encontrada pelo id")
     })
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody SolicitacoesDTO solicitacoesDTO) {
         solicitacoesService.update(id, solicitacoesMapper.toEntity(solicitacoesDTO));
 
@@ -96,6 +100,7 @@ public class SolicitacoesController implements GenericController {
             @ApiResponse(responseCode = "204", description = "A solicitação foi deletada"),
             @ApiResponse(responseCode = "404", description = "A Solicitacão não foi encontrada pelo id")
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         solicitacoesService.excluir(id);
 
@@ -107,6 +112,7 @@ public class SolicitacoesController implements GenericController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "As solicitacões foram pesquisadas")
     })
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<Page<SolicitacoesPesquisaDTO>> pesquisa(
             @RequestParam(value = "usuarioAvaliador", required = false)
             Integer idUsuarioAvaliador,
