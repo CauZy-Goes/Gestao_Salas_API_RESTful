@@ -1,130 +1,206 @@
-# 🚀 API - Gestão de Solicitações para Uso de Espaços Físicos 🏫
 
-Este projeto é uma API REST desenvolvida para gerenciar solicitações de uso de espaços físicos em uma instituição, garantindo organização e eficiência no agendamento de salas. Professores podem solicitar reservas, enquanto avaliadores podem aprovar ou rejeitar os pedidos.
+# 🚀 API RESTful - Gestão de Espaços Físicos 🏫
 
-A estrutura do sistema é robusta, utilizando um banco de dados relacional com diversas relações entre entidades para garantir uma gestão eficiente das informações.
-
-## 🔥 Principais Funcionalidades REST
-
-- ✔️ **Cadastro de Solicitações**: Professores podem registrar pedidos informando data, horário e finalidade.
-- ✔️ **Gerenciamento de Usuários**: Cadastro de professores (solicitantes) e avaliadores (responsáveis pela aprovação).
-- ✔️ **Aprovação de Solicitações**: Avaliadores podem aprovar ou rejeitar pedidos com base na disponibilidade.
-- ✔️ **Histórico de Solicitações**: Registro completo de todas as requisições e suas mudanças de status.
-- ✔️ **CRUD Completo**: Todas as entidades possuem suporte para operações Create, Read, Update e Delete (CRUD) via APIs RESTful.
-- ✔️ **MapStruct**: Utilizado para conversão eficiente entre DTOs e entidades, otimizando a performance do sistema.
-- ✔️ **Envio de E-mails**: Agora, quando um gestor altera uma solicitação (aceita ou rejeita), um e-mail é enviado automaticamente para o professor solicitante.
-
-## 📂 Entidades do Sistema
-
-O banco de dados foi projetado para lidar com um grande volume de dados e relações. As principais tabelas incluem:
-
-- 📌 **Status**: Gerencia os diferentes estados das solicitações.
-- 📌 **Espaço Físico**: Armazena informações sobre as salas disponíveis para reserva.
-- 📌 **Equipamentos**: Lista os equipamentos disponíveis nos espaços físicos.
-- 📌 **Cargos**: Define os cargos dos usuários cadastrados no sistema.
-- 📌 **Usuários**: Professores (solicitantes) e avaliadores.
-- 📌 **Tipo de Sala**: Classifica as salas conforme suas características.
-- 📌 **Solicitações**: Registra os pedidos feitos pelos usuários.
-- 📌 **Log de Ações**: Mantém um histórico detalhado de todas as ações realizadas no sistema.
-
-## 💾 Tecnologias Utilizadas
-
-- ✅ **Java 17** – Linguagem principal do projeto.
-- ✅ **Spring Boot 3** – Desenvolvimento do back-end e criação das APIs RESTful.
-- ✅ **PostgreSQL** – Banco de dados relacional para persistência de informações.
-- ✅ **Hibernate** – ORM para manipulação eficiente das entidades.
-- ✅ **MapStruct** – Conversão automática entre entidades e DTOs.
-- ✅ **Spring Boot Starter Mail** – Para envio de e-mails quando um gestor altera uma solicitação.
-- ✅ **Maven** – Gerenciador de dependências e build do projeto.
-
-## 🔗 Endpoints da API
-
-### 🏢 Cargos
-```
-GET /api/cargos - Lista todos os cargos
-GET /api/cargos/{id} - Retorna um cargo por ID
-POST /api/cargos - Cria um novo cargo
-PUT /api/cargos/{id} - Atualiza um cargo existente
-DELETE /api/cargos/{id} - Exclui um cargo
-```
-
-### 🛠️ Equipamentos
-```
-GET /api/equipamentos - Lista todos os equipamentos
-GET /api/equipamentos/{id} - Retorna um equipamento por ID
-POST /api/equipamentos - Cria um novo equipamento
-PUT /api/equipamentos/{id} - Atualiza um equipamento existente
-DELETE /api/equipamentos/{id} - Exclui um equipamento
-```
-
-### 🏫 Espaços Físicos
-```
-GET /api/espacoFisicos - Lista todos os espaços físicos
-GET /api/espacoFisicos/{id} - Retorna um espaço físico por ID
-POST /api/espacoFisicos - Cria um novo espaço físico
-PUT /api/espacoFisicos/{id} - Atualiza um espaço físico existente
-DELETE /api/espacoFisicos/{id} - Exclui um espaço físico
-```
-
-### 📜 Log de Ações
-```
-GET /api/logAcoes - Lista todos os logs de ações
-GET /api/logAcoes/{id} - Retorna um log de ações por ID
-POST /api/logAcoes - Cria um novo log de ações
-PUT /api/logAcoes/{id} - Atualiza um log de ações existente
-DELETE /api/logAcoes/{id} - Exclui um log de ações
-```
-
-### 📌 Solicitações
-```
-GET /api/solicitacoes - Lista todas as solicitações
-GET /api/solicitacoes/{id} - Retorna uma solicitação por ID
-POST /api/solicitacoes - Cria uma nova solicitação
-PUT /api/solicitacoes/{id} - Atualiza uma solicitação existente
-DELETE /api/solicitacoes/{id} - Exclui uma solicitação
-```
-
-## 🛠️ Configuração do Ambiente
-
-### 1️⃣ Clone o repositório:
-```sh
-git clone https://github.com/CauZy-Goes/Gestao_Solicitacoes_Espacos_REST.git
-cd Gestao_Solicitacoes_Espacos_REST
-```
-
-### 2️⃣ Configure o banco de dados:
-Certifique-se de ter um banco PostgreSQL configurado com as credenciais adequadas no `application.properties`.
-
-### 3️⃣ Configure o envio de e-mails:
-Adicione as configurações de seu provedor de e-mail no `application.properties`:
-```properties
-spring.mail.host=smtp.exemplo.com
-spring.mail.port=587
-spring.mail.username=seu-email@exemplo.com
-spring.mail.password=sua-senha
-spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.starttls.enable=true
-```
-
-### 4️⃣ Execute a API:
-```sh
-mvn spring-boot:run
-```
-
-## 🔗 Repositório do Sistema Web
-
-O front-end deste projeto foi desenvolvido com JSF e PrimeFaces, consumindo essa API REST. Para conferir a aplicação em ação, acesse o repositório:
-
-🔹 **Frontend Web: Gestão de Solicitações de Salas**: [Clique aqui](https://github.com/CauZy-Goes/Gestao_E_Solicitao_De_Salas)
-
-## 🎯 Contribuição
-
-Sinta-se à vontade para contribuir! Basta fazer um fork do repositório, criar uma nova branch com sua funcionalidade ou correção e abrir um pull request. 🚀
-
-## 📝 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
+Esta API RESTful foi desenvolvida para gerenciar solicitações de uso de espaços físicos em instituições, permitindo que professores realizem pedidos e gestores façam avaliações com controle total. Construída com Java 21 e Spring Boot 3, a aplicação implementa autenticação e autorização com OAuth2 e JWT, documentação interativa com Swagger, paginação, filtros dinâmicos com Specifications e ExampleMatcher, validações robustas com Spring Validator, envio automático de e-mails, monitoramento via Actuator, controle de acesso com @PreAuthorize, tratamento global de exceções, log estruturado com SLF4J e deploy automatizado com Docker — tudo seguindo os princípios do Clean Code e SOLID para garantir escalabilidade, clareza e segurança.
 
 ---
 
-Feito por **Cauã Farias** 🚀
+## 🔍 Visão Geral
+Este projeto é uma API RESTful poderosa, robusta e extensível, desenvolvida para gerenciar de forma eficiente as solicitações de uso de espaços físicos em instituições de ensino ou ambientes corporativos. Ele permite que professores registrem solicitações de reserva e que gestores (avaliadores) as aprovem ou rejeitem com base na disponibilidade.
+
+Após diversas melhorias e refatorações, a aplicação atingiu um novo patamar de qualidade e desempenho, passando a adotar uma arquitetura moderna e altamente escalável. Dentre os principais aprimoramentos, destacam-se:
+
+✅ Princípios do Clean Code e SOLID aplicados em todo o projeto. <br/>
+🔐 Segurança reforçada com Spring Security, autenticação com JWT e suporte completo a OAuth2 (Authorization Code Flow e Client Credentials).<br/>
+🛡️ Controle de acesso com anotações como @PreAuthorize("hasRole('GESTOR')") para proteger endpoints sensíveis.<br/>
+🔍 Documentação interativa com Swagger/OpenAPI, permitindo testar os endpoints diretamente na interface.<br/>
+🩺 Monitoramento e métricas com Spring Boot Actuator, expondo informações detalhadas sobre o sistema.<br/>
+❌ Tratamento global de exceções com resposta padronizada para erros de negócio, validações e falhas inesperadas.<br/>
+📩 Envio de e-mails automático em eventos importantes, como alteração de status de solicitações.<br/>
+🧾 Sistema avançado de logs com @Slf4j e configuração de logging com rotação e persistência.<br/>
+⚙️ Validações avançadas usando Spring Validator e anotações customizadas.<br/>
+🔎 Filtros dinâmicos com Specifications e ExampleMatcher para buscas flexíveis e paginadas.<br/>
+🧰 Integração com Thymeleaf para renderização de views personalizadas (como telas de login).<br/>
+🐳 Containerização com Docker, incluindo variáveis de ambiente para fácil configuração e deploy em produção.<br/>
+🔁 Separação em camadas bem definidas, com uso de DTOs, mapeadores via MapStruct e testes facilitados.<br/>
+
+Esta API está preparada para ser utilizada em ambientes de produção, com alto nível de segurança, manutenibilidade e extensibilidade para novos recursos.
+
+## 🌐 Estrutura de Pacotes - Spring Web (REST)
+
+```
+rest/
+├── configuration/     # Configurações específicas para o módulo web (ex: CORS, interceptadores)
+├── controller/        # Endpoints da API - comunicação com o cliente
+├── dto/               # Objetos de transferência de dados (entrada e saída da API)
+├── exception/         # Tratamento de exceções específicas da camada REST
+├── mapper/            # Conversão entre entidades e DTOs (ex: com MapStruct)
+├── validator/         # Validações customizadas e anotações personalizadas
+```
+
+---
+
+## 🗃️ Estrutura de Pacotes - Spring Data JPA (Domain)
+
+```
+domain/
+├── entity/            # Entidades JPA que representam as tabelas do banco de dados
+├── repository/        # Interfaces de repositório com Spring Data JPA
+├── service/           # Lógica de negócio e regras de domínio
+├── utils.exception/   # Exceções reutilizáveis aplicadas na lógica de domínio
+```
+
+---
+
+## 📦 Estrutura de Pacotes Spring Security
+
+```
+security/
+├── auth/                      # Filtros, tokens e providers personalizados
+├── config/                    # Configurações do Authorization Server e WebSecurity
+├── client/                    # Registro dinâmico de clients
+├── service/                   # Integração com UserDetailsService
+```
+
+---
+
+## 📂 Entidades do Sistema
+
+- 📌 **Status**
+- 📌 **Espaço Físico**
+- 📌 **Cargos**
+- 📌 **Usuários** (Professor, Gestor)
+- 📌 **Tipo de Sala**
+- 📌 **Solicitações**
+---
+
+## ⚙️ Tecnologias Utilizadas
+
+| Tecnologia                        | Função                                                       |
+|----------------------------------|--------------------------------------------------------------|
+| **Java 21**                      | Linguagem base                                               |
+| **Spring Boot 3**                | Core do framework                                            |
+| **Spring Security**              | Autenticação e Autorização                                   |
+| **Spring Authorization Server**  | OAuth2 + JWT                                                 |
+| **Spring Data JPA / Hibernate**  | ORM para persistência                                        |
+| **PostgreSQL**                   | Banco de dados                                               |
+| **MapStruct**                    | Conversão entre DTOs e Entidades                             |
+| **Spring Mail**                  | Envio de e-mails                                             |
+| **Bean Validation / Custom Validator** | Validações robustas com mensagens customizadas     |
+| **Swagger / Springdoc OpenAPI**  | Documentação interativa da API                               |
+| **Spring Boot Actuator**         | Monitoramento da aplicação                                   |
+| **Docker**                       | Containerização e deploy                                     |
+| **Thymeleaf**                    | Autenticação via formulário OAuth2                           |
+| **Slf4j + logback**              | Sistema de logs                                              |
+
+---
+
+## 🐳 Docker
+
+### Dockerfile
+
+```dockerfile
+# build
+FROM maven:3.8.8-openjdk-21 as build
+WORKDIR /build
+
+COPY . .
+
+RUN mvn clean package -DskipTests
+
+# run
+FROM openjdk:21
+WORKDIR /app
+
+COPY --from=build /build/target/*.jar app.jar
+
+EXPOSE 8081
+
+# Variáveis de ambiente
+ENV DATASOURCE_URL=""
+ENV DATASOURCE_USERNAME=""
+ENV DATASOURCE_PASSWORD=""
+
+ENV MAIL_HOST=""
+ENV MAIL_PORT=""
+ENV MAIL_USERNAME=""
+ENV MAIL_PASSWORD=""
+ENV MAIL_SMTP=""
+
+ENV SPRING_PROFILES_ACTIVE="production"
+ENV TZ="America/Sao_Paulo"
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
+```
+
+## 🔐 Segurança com OAuth2 e JWT
+
+-  **Fluxos suportados**:
+  - **Client Credentials**
+  - **Authorization Code com Login via Thymeleaf**
+-  **Tokens JWT Assinados**
+-  **Autorização com @PreAuthorize**
+-  **Filtro personalizado de autenticação de client**
+
+---
+
+## 📈 Observabilidade
+
+-  **Spring Boot Actuator**
+-  Endpoints: `/actuator/health`, `/actuator/metrics`, `/actuator/loggers`, `/actuator/heapdump` etc.
+-  Sistema de log rotativo configurado via `logback-spring.xml`
+
+![Actuator](https://github.com/CauZy-Goes/Gestao_Solicitacoes_Espacos_API/blob/main/imgs%20api%20gestao%20salas/ACTUATOR.png?raw=true)
+
+---
+
+## 📄 Documentação Interativa com Swagger
+
+Após rodar a aplicação, acesse:
+
+```
+http://localhost:8081/swagger-ui/index.html
+```
+
+![Swagger](https://github.com/CauZy-Goes/Gestao_Solicitacoes_Espacos_API/blob/main/imgs%20api%20gestao%20salas/SWAGGER.png?raw=true)
+
+---
+
+## 🛠️ Como Rodar Localmente
+
+```bash
+
+# Construa a imagem Docker
+docker build -t gestaoespacos .
+
+# Execute o container com as variáveis de ambiente necessárias
+docker run -p 8081:8081 \
+  -e DATASOURCE_URL="jdbc:postgresql://localhost:5432/gestao" \
+  -e DATASOURCE_USERNAME="postgres" \
+  -e DATASOURCE_PASSWORD="sua_senha" \
+  -e MAIL_HOST="smtp.seudominio.com" \
+  -e MAIL_PORT="587" \
+  -e MAIL_USERNAME="email@seudominio.com" \
+  -e MAIL_PASSWORD="senha_email" \
+  -e MAIL_SMTP="smtp.seudominio.com" \
+  -e SPRING_PROFILES_ACTIVE="production" \
+  -e TZ="America/Sao_Paulo" \
+  gestaoespacos
+```
+
+---
+
+## 🧠 Contribuições e Boas Práticas Adotadas
+
+-  **Princípios SOLID**
+-  **Camadas bem definidas**
+-  **Boas práticas de DTOs, validações, tratamento de erros e organização de pacotes**
+-  **Autenticação e segurança alinhada com padrões modernos**
+
+---
+
+## 👨‍💻 Autor
+
+Desenvolvido por [Cauã Farias (CauZy-Goes)](https://github.com/CauZy-Goes)  
+---
