@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ucsal.cauzy.domain.entity.Cargo;
 import ucsal.cauzy.domain.service.CargoService;
@@ -35,6 +36,7 @@ public class CargoController implements GenericController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Sucesso.")
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<List<CargoDTO>> listar() {
         log.info("Listando todos os cargos");
 
@@ -52,6 +54,7 @@ public class CargoController implements GenericController {
             @ApiResponse(responseCode = "200", description = "Autor encontrado."),
             @ApiResponse(responseCode = "404", description = "Autor não encontrado.")
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<CargoDTO> getCargoById(@PathVariable Integer id) {
 
         CargoDTO cargoResultado = cargoMapper.toDTO(cargoService.findById(id));
@@ -63,6 +66,7 @@ public class CargoController implements GenericController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Autor encontrado."),
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<Void> createCargo(@RequestBody @Valid CargoDTO cargoDTO) {
         log.info("Cadastrando novo cargo: {}", cargoDTO.nomeCargo());
 
@@ -78,6 +82,7 @@ public class CargoController implements GenericController {
             @ApiResponse(responseCode = "204", description = "Cargo atualizado com sucesso."),
             @ApiResponse(responseCode = "404", description = "Cargo não encontrado."),
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<Void> updateCargo(@PathVariable Integer id, @RequestBody @Valid CargoDTO cargoDTO) {
         cargoService.update(cargoMapper.toEntity(cargoDTO), id);
 
@@ -91,6 +96,7 @@ public class CargoController implements GenericController {
             @ApiResponse(responseCode = "404", description = "Cargo não encontrado."),
             @ApiResponse(responseCode = "409", description = "Alguma entidade depende do cargo.")
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<Void> deleteCargo(@PathVariable Integer id) {
 
         cargoService.delete(id);
