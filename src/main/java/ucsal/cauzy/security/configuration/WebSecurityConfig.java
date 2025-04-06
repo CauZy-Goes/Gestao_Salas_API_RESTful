@@ -20,6 +20,8 @@ import org.springframework.security.oauth2.server.resource.web.authentication.Be
 import org.springframework.security.web.SecurityFilterChain;
 import ucsal.cauzy.domain.repository.UsuarioRepository;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import ucsal.cauzy.security.auth.JwtCustomAuthenticationFilter;
+import ucsal.cauzy.security.service.UsuarioDetailsService;
 
 import java.util.stream.Collectors;
 

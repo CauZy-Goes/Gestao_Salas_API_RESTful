@@ -1,4 +1,4 @@
-package ucsal.cauzy.security.configuration;
+package ucsal.cauzy.security.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;

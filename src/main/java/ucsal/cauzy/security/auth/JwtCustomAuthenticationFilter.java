@@ -1,4 +1,4 @@
-package ucsal.cauzy.security.configuration;
+package ucsal.cauzy.security.auth;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

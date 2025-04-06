@@ -10,6 +10,8 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ucsal.cauzy.security.auth.CustomClientAuthenticationFilter;
+import ucsal.cauzy.security.auth.CustomClientAuthenticationProvider;
 
 @Configuration
 @RequiredArgsConstructor
