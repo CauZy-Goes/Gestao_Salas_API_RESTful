@@ -47,7 +47,7 @@ public class WebSecurityConfig {
                         )
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login/**", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/login/**", "/css/**", "/js/**","/actuator/**").permitAll()
                         .requestMatchers("/oauth2/token").permitAll()
                         .anyRequest().authenticated()
                 )
