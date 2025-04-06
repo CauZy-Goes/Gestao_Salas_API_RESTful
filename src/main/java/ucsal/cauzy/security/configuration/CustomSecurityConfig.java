@@ -26,7 +26,7 @@ public class CustomSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/oauth2/token").permitAll()
-                        .requestMatchers("/cargos/**").hasAuthority("SCOPE_read")
+                        .requestMatchers("/cargos/**").hasAuthority("SCOPE_gestor")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
