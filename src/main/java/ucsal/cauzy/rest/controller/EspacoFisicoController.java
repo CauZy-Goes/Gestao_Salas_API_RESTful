@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ucsal.cauzy.domain.entity.EspacoFisico;
 import ucsal.cauzy.domain.entity.Status;
@@ -38,6 +39,7 @@ public class EspacoFisicoController implements GenericController{
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Espacos Fisicos Listados com Sucesso")
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<List<EspacoFisicoPesquisaDTO>> findAll() {
         List<EspacoFisicoPesquisaDTO> listaEspacos = espacoFisicoService.findAll()
                 .stream()
@@ -53,6 +55,7 @@ public class EspacoFisicoController implements GenericController{
             @ApiResponse(responseCode = "200", description = "Espaco Físico encontrado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Espaco Físico não encontrado")
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<EspacoFisicoPesquisaDTO> findById(@PathVariable Integer id){
         EspacoFisicoPesquisaDTO espacoFisicoPesquisaDTO = espacoFisicoMapper.toDTO(espacoFisicoService.findById(id));
         return ResponseEntity.ok(espacoFisicoPesquisaDTO);
@@ -64,6 +67,7 @@ public class EspacoFisicoController implements GenericController{
             @ApiResponse(responseCode = "201", description = "Espaco Físico Criado Com Sucesso"),
             @ApiResponse(responseCode = "409", description = "Esse número de espaco Fisico Já foi cadastrado")
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<Void> save(@RequestBody @Valid EspacoFisicoDTO espacoFisicoDTO){
          EspacoFisico espacoFisico = espacoFisicoMapper.toEntity(espacoFisicoDTO);
         espacoFisicoService.save(espacoFisico);
@@ -78,6 +82,7 @@ public class EspacoFisicoController implements GenericController{
             @ApiResponse(responseCode = "404", description = "Espaco Físico Não encontrado"),
             @ApiResponse(responseCode = "409", description = "O nuemero que foi modificado esta em uso"),
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<Void> update(@RequestBody @Valid EspacoFisicoDTO espacoFisicoDTO, @PathVariable Integer id){
         espacoFisicoService.update(espacoFisicoMapper.toEntity(espacoFisicoDTO) , id);
 
@@ -90,6 +95,7 @@ public class EspacoFisicoController implements GenericController{
             @ApiResponse(responseCode = "204", description = "EspacoFisico Deletado Com Sucesso"),
             @ApiResponse(responseCode = "404", description = "Espaco físico não encontrado")
     })
+    @PreAuthorize("hasRole('GESTOR')")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         espacoFisicoService.delete(id);
         return ResponseEntity.noContent().build();
