@@ -31,12 +31,6 @@ public class tipoSalaController implements GenericController {
 
     private final TipoSalaMapper tipoSalaMapper;
 
-    @GetMapping("/debugAuthorities")
-    public ResponseEntity<?> debugAuthorities() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        return ResponseEntity.ok(auth.getAuthorities());
-    }
-
     @GetMapping("/{id}")
     @Operation(summary = "Buscar Pelo Id", description = "Busca O Tipo De Sala Pelo ID")
     @ApiResponses({
