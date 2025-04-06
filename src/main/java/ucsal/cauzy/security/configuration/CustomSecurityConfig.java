@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -22,11 +23,13 @@ public class CustomSecurityConfig {
         AuthenticationManager authManager = new ProviderManager(customProvider);
 
         http
-                .csrf(csrf -> csrf.disable()) // ✅ sem warning
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/oauth2/token").permitAll()
+                        .requestMatchers("/cargos/**").hasAuthority("SCOPE_read")
                         .anyRequest().authenticated()
                 )
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .addFilterBefore(new CustomClientAuthenticationFilter(authManager), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
