@@ -62,5 +62,13 @@ public class GlobalExceptionHandler {
         return new ErroResposta(HttpStatus.FORBIDDEN.value(), "Acesso Negado.", List.of());
     }
 
-
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErroResposta handleErrosNaoTratados(RuntimeException e){
+        log.error("Erro inesperado", e);
+        return new ErroResposta(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Ocorreu um erro inesperado. Entre em contato com a administração."
+                , List.of());
+    }
 }
