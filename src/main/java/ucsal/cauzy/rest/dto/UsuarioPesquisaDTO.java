@@ -8,6 +8,7 @@ public record UsuarioPesquisaDTO(
         String nomeUsuario,
         String email,
         String senha,
+        String numero,
         CargoDTO cargo
         ) {
 }

@@ -25,6 +25,10 @@ public record UsuarioDTO(
         @Schema(description = "Senha do usuário")
         String senha,
 
+        @NotBlank(message = "Campo obrigatório")
+        @Schema(description = "Número do usuário")
+        String numero,
+
         @NotNull(message = "Campo obrigatório")
         @Schema(description = "Identificador do cargo do usuário")
         Integer idCargo
