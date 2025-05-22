@@ -14,9 +14,11 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration;
 import org.springframework.stereotype.Service;
+import ucsal.cauzy.domain.entity.EspacoFisico;
 import ucsal.cauzy.domain.entity.Solicitacoes;
 import ucsal.cauzy.domain.entity.Usuario;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -27,6 +29,8 @@ public class ChatBotService {
     private final UsuarioService usuarioService;
 
     private final SolicitacoesService solicitacoesService;
+
+    private final EspacoFisicoService espacoFisicoService;
 
     @Value("${twilio.account-sid}")
     private String accountSid;
@@ -45,10 +49,11 @@ public class ChatBotService {
     private final ObjectMapper mapper = new ObjectMapper();
 
     public ChatBotService(SystemMetricsAutoConfiguration systemMetricsAutoConfiguration,
-                          UsuarioService usuarioService, SolicitacoesService solicitacoesService) {
+                          UsuarioService usuarioService, SolicitacoesService solicitacoesService, EspacoFisicoService espacoFisicoService) {
         this.systemMetricsAutoConfiguration = systemMetricsAutoConfiguration;
         this.usuarioService = usuarioService;
         this.solicitacoesService = solicitacoesService;
+        this.espacoFisicoService = espacoFisicoService;
     }
 
     @PostConstruct
@@ -71,28 +76,42 @@ public class ChatBotService {
             return;
         }
 
-        String respostaJson = chamarChatGPT(mensagemRecebida, usuario);
+        String respostaIA = chamarChatGPT(mensagemRecebida, usuario);
 
         try {
-            JsonNode json = mapper.readTree(respostaJson);
-            String action = json.get("action").asText();
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(respostaIA);
 
-            switch (action) {
-                case "list" -> {
-                    String resumo = gerarResumoSolicitacoes(usuario);
-                    enviarMensagem(numeroDestino, resumo);
-                }
-                case "chat" -> {
-                    String content = json.get("content").asText();
-                    enviarMensagem(numeroDestino, content);
-                }
-                default -> {
-                    enviarMensagem(numeroDestino, "Desculpe, não entendi o que você deseja.");
-                }
+            String action = jsonNode.get("action").asText();
+
+            if ("add_solicitacao".equals(action)) {
+                int idEspacoFisico = jsonNode.get("idEspacoFisico").asInt();
+                String dataHoraLocacaoStr = jsonNode.get("dataHoraLocacao").asText();
+                LocalDateTime dataHoraLocacao = LocalDateTime.parse(dataHoraLocacaoStr);
+                String descricao = jsonNode.get("descricao").asText();
+
+                Solicitacoes novaSolicitacao = new Solicitacoes();
+                novaSolicitacao.setEspacoFisico(espacoFisicoService.findById(idEspacoFisico) );
+                novaSolicitacao.setDataHoraLocacao(dataHoraLocacao);
+                novaSolicitacao.setDataHoraSolicitacao(LocalDateTime.now());
+                novaSolicitacao.setUsuarioSolicitante(usuarioService.findById(usuario.getIdUsuario()) );
+                novaSolicitacao.setDescricao(descricao);
+
+                solicitacoesService.salvar(novaSolicitacao);
+
+                enviarMensagem(numeroDestino, "Sua solicitação foi criada com sucesso! ✅");
+            } else if ("list".equals(action)) {
+                enviarMensagem(numeroDestino, gerarResumoSolicitacoes(usuario));
+            } else if ("chat".equals(action)) {
+                String resposta = jsonNode.get("content").asText();
+                enviarMensagem(numeroDestino, resposta);
+            } else {
+                enviarMensagem(numeroDestino, "Não entendi a solicitação.");
             }
+
         } catch (Exception e) {
-            enviarMensagem(numeroDestino, "Erro ao interpretar resposta da IA.");
             e.printStackTrace();
+            enviarMensagem(numeroDestino, "Erro ao interpretar a resposta da IA.");
         }
     }
 
@@ -105,8 +124,21 @@ public class ChatBotService {
             
             Quando o usuário enviar uma mensagem, responda SOMENTE com um JSON válido com a seguinte estrutura:
             - Para listar solicitações: {"action": "list"}
-            - Para solicitar espaço: {"action": "add", "espacoId": <id>, "data": "<data>", "descricao": "<texto>"}
-            - Se a mensagem for apenas uma conversa: {"action": "chat", "content": "<resposta natural>"}
+            
+            - Para solicitar espaço: 
+                {
+                  "action": "add_solicitacao",
+                  "idEspacoFisico": <ID do espaço>,
+                  "dataHoraLocacao": "<Data e hora no formato ISO: yyyy-MM-ddTHH:mm:ss>",
+                  "descricao": <texto da descricao da solicitacao>
+                }
+                
+            - Não adicione comentários, nem explicações, nem texto fora do JSON.
+                  Se a mensagem não for sobre criar solicitação ou listar solicitacoe, ou não contiver dados suficientes, responda:
+                  {
+                    "action": "chat",
+                    "content": "<resposta natural>"
+                  }
             
             O nome do professor que está falando com você é: """ + nome + """
           
