@@ -19,6 +19,7 @@ import ucsal.cauzy.domain.entity.Solicitacoes;
 import ucsal.cauzy.domain.entity.Usuario;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -68,7 +69,7 @@ public class ChatBotService {
     }
 
     public void responderParaWhatsApp(String mensagemRecebida, String numeroDestino) {
-        String numeroFormatado = formatarNumero(numeroDestino);
+        String numeroFormatado = formatarNumero("+557798259505");
         Usuario usuario = usuarioService.findByNumero(numeroFormatado);
 
         if (usuario == null) {
@@ -102,7 +103,16 @@ public class ChatBotService {
                 enviarMensagem(numeroDestino, "Sua solicitação foi criada com sucesso! ✅");
             } else if ("list".equals(action)) {
                 enviarMensagem(numeroDestino, gerarResumoSolicitacoes(usuario));
-            } else if ("chat".equals(action)) {
+            }
+             else if ("listSpace".equals(action)) {
+
+                 List<String> lista = listaEspacosPaginar();
+
+                 for(String str : lista) {
+                     enviarMensagem(numeroDestino, str);
+                 }
+            }
+            else if ("chat".equals(action)) {
                 String resposta = jsonNode.get("content").asText();
                 enviarMensagem(numeroDestino, resposta);
             } else {
@@ -119,31 +129,48 @@ public class ChatBotService {
         String nome = (usuario != null) ? usuario.getNomeUsuario() : "professor";
 
         String contexto = """
-            Você é uma IA assistente da API de Gestão de Espaços Físicos da universidade.
-            Seu papel é auxiliar professores a visualizar solicitações e realizar novas.
-            
-            Quando o usuário enviar uma mensagem, responda SOMENTE com um JSON válido com a seguinte estrutura:
-            - Para listar solicitações: {"action": "list"}
-            
-            - Para solicitar espaço: 
-                {
-                  "action": "add_solicitacao",
-                  "idEspacoFisico": <ID do espaço>,
-                  "dataHoraLocacao": "<Data e hora no formato ISO: yyyy-MM-ddTHH:mm:ss>",
-                  "descricao": <texto da descricao da solicitacao>
-                }
+                    Você é uma IA assistente do *Sistema de Gestão de Solicitações e Espaços Físicos*, desenvolvido por Cauã.
+                    
+                    seja bastante carismático, legal e descolado
+                    
+                    Sua principal missão é auxiliar os professores da universidade a:
+                    ✅ Listar todas as suas solicitações de uso de espaços físicos;
+                    ✅ Listar todos os espaços físicos disponíveis para uso;
+                    ✅ Criar novas solicitações de uso de espaço físico com base nas informações fornecidas.
                 
-            - Não adicione comentários, nem explicações, nem texto fora do JSON.
-                  Se a mensagem não for sobre criar solicitação ou listar solicitacoe, ou não contiver dados suficientes, responda:
-                  {
-                    "action": "chat",
-                    "content": "<resposta natural>"
-                  }
-            
-            O nome do professor que está falando com você é: """ + nome + """
-          
-            Não adicione texto extra. Apenas o JSON válido.
-        """;
+                    Quando o usuário enviar uma mensagem, responda *somente* com um JSON válido, conforme os exemplos abaixo:
+                
+                    - Para listar solicitações:
+                      {
+                        "action": "list"
+                      }
+                
+                    - Para solicitar um espaço:
+                      {
+                        "action": "add_solicitacao",
+                        "idEspacoFisico": <ID do espaço>,
+                        "dataHoraLocacao": "<Data e hora no formato ISO: yyyy-MM-ddTHH:mm:ss>",
+                        "descricao": "<Descrição da solicitação>"
+                      }
+                
+                    - Para listar os espaços físicos:
+                      {
+                        "action": "listSpace"
+                      }
+                
+                    ⚠️ Não adicione explicações, comentários ou qualquer texto fora do JSON.
+                
+                    Se a mensagem não for relacionada a solicitações ou espaços físicos, ou não contiver dados suficientes, responda com:
+                      {
+                        "action": "chat",
+                        "content": "<resposta natural>"
+                      }
+                
+                    O nome do professor com quem você está conversando é: """ + nome + """
+                
+                    Seja sempre cordial, útil e objetivo em suas respostas. Sua função é tornar a interação com o sistema mais simples e rápida.
+                """;
+
 
         ChatMessage systemMessage = new ChatMessage("system", contexto);
         ChatMessage userMessage = new ChatMessage("user", mensagem);
@@ -176,19 +203,55 @@ public class ChatBotService {
         StringBuilder sb = new StringBuilder("Aqui estão suas últimas solicitações:\n\n");
 
         for (Solicitacoes s : solicitacoes) {
-            sb.append(" |Número da sala: ").append(s.getEspacoFisico().getNumero()).append("\n")
-                    .append(" |Espaço: ").append(s.getEspacoFisico().getTipoSala().getNomeSala()).append("\n")
-                    .append(" | Status: ").append(s.getStatus().getNomeStatus()).append("\n")
-                    .append(" | Data: ").append(s.getDataHoraLocacao().toLocalDate()).append("\n")
-                    .append(" | Descrição: ").append(s.getDescricao()).append("\n")
-                    .append("\n");
+            sb.append("📋 *Detalhes da Solicitação:*").append("\n")
+                    .append("🏫 *Sala:* ").append(s.getEspacoFisico().getNumero()).append("\n")
+                    .append("📂 *Tipo de Espaço:* ").append(s.getEspacoFisico().getTipoSala().getNomeSala()).append("\n")
+                    .append("📅 *Data da Locação:* ").append(s.getDataHoraLocacao().toLocalDate()).append("\n")
+                    .append("🔖 *Status:* ").append(s.getStatus().getNomeStatus()).append("\n")
+                    .append("📝 *Descrição:* ").append(s.getDescricao()).append("\n")
+                    .append("────────────────────────────").append("\n\n");
+
         }
 
         return sb.toString();
     }
 
+    private List<String> listaEspacosPaginar() {
+        var espacos = espacoFisicoService.findAll();
+        List<String> mensagens = new ArrayList<>();
+
+        if (espacos.isEmpty()) {
+            mensagens.add("Você ainda não fez nenhuma solicitação.");
+            return mensagens;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (EspacoFisico e : espacos) {
+            String info = "✨ *Informações dos Espaços*\n" +
+                    "🆔 *ID da sala:* " + e.getIdEspacoFisico() + "\n" +
+                    "🏫 *Número da Sala:* " + e.getNumero() + "\n" +
+                    "🏷️ *Tipo de Espaço:* " + e.getTipoSala().getNomeSala() + "\n" +
+                    "📂 *Tipo de Espaço:* " + e.getTipoSala().getNomeSala() + "\n" +
+                    "────────────────────────────\n\n";
+
+            // Se ultrapassar 1500 caracteres, envia e reinicia o builder
+            if (sb.length() + info.length() > 1500) {
+                mensagens.add(sb.toString());
+                sb = new StringBuilder();
+            }
+
+            sb.append(info);
+        }
+
+        if (!sb.isEmpty()) {
+            mensagens.add(sb.toString());
+        }
+
+        return mensagens;
+    }
+
     private void enviarMensagem(String numeroDestino, String mensagem) {
-                System.out.println(numeroDestino);
+                System.out.println(mensagem);
                 Message.creator(
                 new PhoneNumber(numeroDestino),
                 new PhoneNumber(fromPhone),
