@@ -49,10 +49,11 @@ public class WebSecurityConfig {
                         )
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login/**", "/css/**", "/js/**","/actuator/**").permitAll()
+                        .requestMatchers("/login/**", "/css/**", "/js/**", "/actuator/**", "/webhook/**", "/webhook").permitAll()
                         .requestMatchers("/oauth2/token").permitAll()
                         .anyRequest().authenticated()
                 )
+
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
                 )
@@ -70,7 +71,7 @@ public class WebSecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers(
                 "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
-                "/swagger-resources/**", "/webjars/**", "/actuator/**"
+                "/swagger-resources/**", "/webjars/**", "/actuator/**", "/webhook", "/webhook/**"
         );
     }
 

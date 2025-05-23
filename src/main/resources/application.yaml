@@ -68,3 +68,11 @@ logging:
       layout:
         type: PatternLayout
         pattern: '%d{yyyy-MM-dd HH:mm:ss} %-5level [%logger{36}] - %msg%n'
+
+openai:
+  api-key: ${OPENAI_API_KEY}
+
+twilio:
+  account-sid: ${TWILIO_ACCOUNT_SID}
+  auth-token: ${TWILIO_AUTH_TOKEN}
+  phone-number: ${TWILIO_PHONE_NUMBER}

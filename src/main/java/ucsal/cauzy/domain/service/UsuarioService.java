@@ -32,6 +32,10 @@ public class UsuarioService {
         return usuarioRepository.findByEmail(email).orElse(null);
     }
 
+    public Usuario findByNumero(String numero) {
+        return usuarioRepository.findByNumero(numero).orElse(null);
+    }
+
     public List<Usuario> findAll(){
         return usuarioRepository.findAll();
     }

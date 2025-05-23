@@ -31,6 +31,9 @@ public class Usuario implements Serializable {
 	@Column(name = "senha" , nullable = false, length = 255)
 	private String senha;
 
+	@Column(name = "numero" , nullable = false, length = 255)
+	private String numero;
+
 	@ManyToOne
     @JoinColumn(name = "idcargo", nullable = false)
     private Cargo cargo;
