@@ -69,7 +69,7 @@ public class ChatBotService {
     }
 
     public void responderParaWhatsApp(String mensagemRecebida, String numeroDestino) {
-        String numeroFormatado = formatarNumero("+557798259505");
+        String numeroFormatado = formatarNumero(numeroDestino);
         Usuario usuario = usuarioService.findByNumero(numeroFormatado);
 
         if (usuario == null) {
@@ -137,15 +137,19 @@ public class ChatBotService {
                     ✅ Listar todas as suas solicitações de uso de espaços físicos;
                     ✅ Listar todos os espaços físicos disponíveis para uso;
                     ✅ Criar novas solicitações de uso de espaço físico com base nas informações fornecidas.
+                    
+                    Quem vai falar com voce seram os professores, eles vao querer ver quais as salas estam disponiveis para fazer os agendamentos deles, logo 
+                    eles vao querer agendar/solicitar agendamentos/solicitacoes de salas para fazer suas atividades, vc é capas de fazer essa agendamento e tb é capaz de mostrar
+                    as solicitacoes/ agendamentos do professor.
                 
                     Quando o usuário enviar uma mensagem, responda *somente* com um JSON válido, conforme os exemplos abaixo:
                 
-                    - Para listar solicitações:
+                    - Para listar/exibir/mostrar solicitações de espaços físicos/salas/aulas:
                       {
                         "action": "list"
                       }
                 
-                    - Para solicitar um espaço:
+                    - Para solicitar/agendar/fazer solicitacao/solicitar um espaço/sala/aula/espaco fisico:
                       {
                         "action": "add_solicitacao",
                         "idEspacoFisico": <ID do espaço>,
@@ -153,7 +157,7 @@ public class ChatBotService {
                         "descricao": "<Descrição da solicitação>"
                       }
                 
-                    - Para listar os espaços físicos:
+                    - Para listar/exibir/mostrar todos os espaços físicos / salas do :
                       {
                         "action": "listSpace"
                       }
@@ -167,8 +171,8 @@ public class ChatBotService {
                       }
                 
                     O nome do professor com quem você está conversando é: """ + nome + """
-                
-                    Seja sempre cordial, útil e objetivo em suas respostas. Sua função é tornar a interação com o sistema mais simples e rápida.
+                    use o vocativo sendo o nome do professor, exemplos : Olá, Professor """ + nome + """
+                    Seja sempre cordial, útil em suas respostas. Sua função é tornar a interação com o sistema mais simples e rápida.
                 """;
 
 
@@ -178,8 +182,8 @@ public class ChatBotService {
         ChatCompletionRequest request = ChatCompletionRequest.builder()
                 .model("gpt-3.5-turbo")
                 .messages(List.of(systemMessage, userMessage))
-                .maxTokens(200)
-                .temperature(0.85)
+                .maxTokens(600)
+                .temperature(0.9)
                 .build();
 
         ChatCompletionResult result = openAiService.createChatCompletion(request);
@@ -205,7 +209,7 @@ public class ChatBotService {
         for (Solicitacoes s : solicitacoes) {
             sb.append("📋 *Detalhes da Solicitação:*").append("\n")
                     .append("🏫 *Sala:* ").append(s.getEspacoFisico().getNumero()).append("\n")
-                    .append("📂 *Tipo de Espaço:* ").append(s.getEspacoFisico().getTipoSala().getNomeSala()).append("\n")
+                    .append("📂 *Tipo de Sala:* ").append(s.getEspacoFisico().getTipoSala().getNomeSala()).append("\n")
                     .append("📅 *Data da Locação:* ").append(s.getDataHoraLocacao().toLocalDate()).append("\n")
                     .append("🔖 *Status:* ").append(s.getStatus().getNomeStatus()).append("\n")
                     .append("📝 *Descrição:* ").append(s.getDescricao()).append("\n")
@@ -230,8 +234,7 @@ public class ChatBotService {
             String info = "✨ *Informações dos Espaços*\n" +
                     "🆔 *ID da sala:* " + e.getIdEspacoFisico() + "\n" +
                     "🏫 *Número da Sala:* " + e.getNumero() + "\n" +
-                    "🏷️ *Tipo de Espaço:* " + e.getTipoSala().getNomeSala() + "\n" +
-                    "📂 *Tipo de Espaço:* " + e.getTipoSala().getNomeSala() + "\n" +
+                    "🏷️ *Tipo de Sala:* " + e.getTipoSala().getNomeSala() + "\n" +
                     "────────────────────────────\n\n";
 
             // Se ultrapassar 1500 caracteres, envia e reinicia o builder
