@@ -1,7 +1,7 @@
 
 # 🚀 API RESTful - Gestão de Espaços Físicos 🏫
 
-Esta API RESTful foi desenvolvida para gerenciar solicitações de uso de espaços físicos em instituições, permitindo que professores realizem pedidos e gestores façam avaliações com controle total. Construída com Java 21 e Spring Boot 3, a aplicação implementa autenticação e autorização com OAuth2 e JWT, documentação interativa com Swagger, paginação, filtros dinâmicos com Specifications e ExampleMatcher, validações robustas com Spring Validator, envio automático de e-mails, monitoramento via Actuator, controle de acesso com @PreAuthorize, tratamento global de exceções, log estruturado com SLF4J e deploy automatizado com Docker — tudo seguindo os princípios do Clean Code e SOLID para garantir escalabilidade, clareza e segurança.
+Esta API RESTful foi desenvolvida para gerenciar solicitações de uso de espaços físicos em instituições, permitindo que professores realizem pedidos e gestores façam avaliações com controle total. Construída com Java 21 e Spring Boot 3, a aplicação implementa autenticação e autorização com OAuth2 e JWT, documentação interativa com Swagger, paginação, filtros dinâmicos com Specifications e ExampleMatcher, validações robustas com Spring Validator, envio automático de e-mails, monitoramento via Actuator, controle de acesso com @PreAuthorize, tratamento global de exceções, log estruturado com SLF4J, integração com chatbot via WhatsApp (usando Twilio e OpenAI) e deploy automatizado com Docker — tudo seguindo os princípios do Clean Code e SOLID para garantir escalabilidade, clareza e segurança.
 
 ---
 
@@ -17,6 +17,7 @@ Após diversas melhorias e refatorações, a aplicação atingiu um novo patamar
 🩺 Monitoramento e métricas com Spring Boot Actuator, expondo informações detalhadas sobre o sistema.<br/>
 ❌ Tratamento global de exceções com resposta padronizada para erros de negócio, validações e falhas inesperadas.<br/>
 📩 Envio de e-mails automático em eventos importantes, como alteração de status de solicitações.<br/>
+💬 Integração com um Chatbot no WhatsApp utilizando OpenAI (GPT) e Twilio, permitindo interações inteligentes para criar, listar solicitações e consultar espaços físicos diretamente pelo WhatsApp.<br/>
 🧾 Sistema avançado de logs com @Slf4j e configuração de logging com rotação e persistência.<br/>
 ⚙️ Validações avançadas usando Spring Validator e anotações customizadas.<br/>
 🔎 Filtros dinâmicos com Specifications e ExampleMatcher para buscas flexíveis e paginadas.<br/>
@@ -25,6 +26,38 @@ Após diversas melhorias e refatorações, a aplicação atingiu um novo patamar
 🔁 Separação em camadas bem definidas, com uso de DTOs, mapeadores via MapStruct e testes facilitados.<br/>
 
 Esta API está preparada para ser utilizada em ambientes de produção, com alto nível de segurança, manutenibilidade e extensibilidade para novos recursos.
+
+## 🤖 Funcionalidade do Chatbot no WhatsApp
+
+O sistema conta com um chatbot inteligente, desenvolvido com integração ao **OpenAI (GPT-3.5)** e **Twilio**, que permite aos professores interagirem diretamente com a api pelo WhatsApp para:
+
+- 📋 Listar todas as solicitações de um professor
+- 🏫 Listar todos os espaços físicos disponíveis
+- ✍️ Criar novas solicitações de uso de espaços físicos
+- 💬 Bater papo e interagir naturalmente com os usuários
+
+### 🔗 Funcionamento:
+
+- A comunicação é feita por meio de um webhook `/webhook` que recebe as mensagens do WhatsApp via Twilio.
+- A IA interpreta as mensagens, entende a intenção e responde com ações como listar, cadastrar ou consultar espaços.
+- Toda a lógica de integração está no serviço `ChatBotService`.
+
+### 🔑 Tecnologias usadas no chatbot:
+
+- **Twilio API for WhatsApp**
+- **OpenAI GPT-3.5 Turbo**
+- **Spring Boot 3**
+- **Webhook RESTful**
+
+---
+
+### 🖼️ Imagens do Chatbot em Ação
+
+| ![1](imgs%20api%20gestao%20salas/chat_bot_apresentacao.png) | ![2](imgs%20api%20gestao%20salas/chat_bot_salas.png) |
+|-------------------------|-------------------------|
+| ![3](imgs%20api%20gestao%20salas/chat_bot_soli1.png) | ![4](imgs%20api%20gestao%20salas/chat_bot_salas_soli2.png) |
+
+---
 
 ## 🌐 Estrutura de Pacotes - Spring Web (REST)
 
@@ -92,6 +125,8 @@ security/
 | **Docker**                       | Containerização e deploy                                     |
 | **Thymeleaf**                    | Autenticação via formulário OAuth2                           |
 | **Slf4j + logback**              | Sistema de logs                                              |
+| **Twilio API**                   | Integração com WhatsApp                                      |
+| **OpenAI GPT API**               | Inteligência Artificial para o Chatbot                       |
 
 ---
 
@@ -100,23 +135,20 @@ security/
 ### Dockerfile
 
 ```dockerfile
-# build
-FROM maven:3.8.8-openjdk-21 as build
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /build
 
 COPY . .
 
 RUN mvn clean package -DskipTests
 
-# run
-FROM openjdk:21
+FROM eclipse-temurin:21-jre
 WORKDIR /app
 
 COPY --from=build /build/target/*.jar app.jar
 
 EXPOSE 8081
 
-# Variáveis de ambiente
 ENV DATASOURCE_URL=""
 ENV DATASOURCE_USERNAME=""
 ENV DATASOURCE_PASSWORD=""
@@ -127,10 +159,16 @@ ENV MAIL_USERNAME=""
 ENV MAIL_PASSWORD=""
 ENV MAIL_SMTP=""
 
+ENV OPENAI_API_KEY=""
+ENV TWILIO_ACCOUNT_SID=""
+ENV TWILIO_AUTH_TOKEN=""
+ENV TWILIO_PHONE_NUMBER=""
+
 ENV SPRING_PROFILES_ACTIVE="production"
 ENV TZ="America/Sao_Paulo"
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
 
 ```
 
@@ -175,18 +213,21 @@ http://localhost:8081/swagger-ui/index.html
 docker build -t gestaoespacos .
 
 # Execute o container com as variáveis de ambiente necessárias
-docker run -p 8081:8081 \
-  -e DATASOURCE_URL="jdbc:postgresql://localhost:5432/gestao" \
+docker run -d -p 8081:8081 \
+  -e DATASOURCE_URL="jdbc:postgresql://host.docker.internal:5432/gestao" \
   -e DATASOURCE_USERNAME="postgres" \
-  -e DATASOURCE_PASSWORD="sua_senha" \
-  -e MAIL_HOST="smtp.seudominio.com" \
+  -e DATASOURCE_PASSWORD="suaSenha" \
+  -e MAIL_HOST="smtp.gmail.com" \
   -e MAIL_PORT="587" \
-  -e MAIL_USERNAME="email@seudominio.com" \
-  -e MAIL_PASSWORD="senha_email" \
-  -e MAIL_SMTP="smtp.seudominio.com" \
-  -e SPRING_PROFILES_ACTIVE="production" \
-  -e TZ="America/Sao_Paulo" \
-  gestaoespacos
+  -e MAIL_USERNAME="seuemail@gmail.com" \
+  -e MAIL_PASSWORD="suaSenhaEmail" \
+  -e MAIL_SMTP="smtp.gmail.com" \
+  -e OPENAI_API_KEY="sk-xxxxxxxxxxxxxxxxxxxx" \
+  -e TWILIO_ACCOUNT_SID="ACxxxxxxxxxxxxxxxx" \
+  -e TWILIO_AUTH_TOKEN="xxxxxxxxxxxxxxxxxxxx" \
+  -e TWILIO_PHONE_NUMBER="whatsapp:+55XXXXXXXXXXX" \
+  --name gestao-espacos \
+  gestao-espacos-api
 ```
 
 ---
